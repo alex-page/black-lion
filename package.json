@@ -1,0 +1,38 @@
+{
+	"name": "black-lion",
+	"version": "1.0.0",
+	"description": "Some experimentation with got and a large api and database",
+	"author": {
+		"name": "Alex Page",
+		"email": "alex@alexpage.com.au",
+		"url": "http://alexpage.com.au/"
+	},
+	"contributors": [
+		{
+			"name": "Alex Page",
+			"email": "alex@alexpage.com.au",
+			"url": "http://alexpage.com.au"
+		}
+	],
+	"scripts": {
+		"start": "",
+		"watch": "",
+		"build": "",
+		"test": ""
+	},
+	"engines": {
+		"node": "8.8.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alex-page/black-lion"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/alex-page/black-lion/issues"
+	},
+	"homepage": "https://github.com/alex-page/black-lion#readme",
+	"dependencies": {
+		"got": "^8.0.0"
+	}
+}
