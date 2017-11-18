@@ -1,2 +1,2 @@
-# got-gw2api
-> Test `got` with an API
+# Black lion
+> Some experimentation with `got` and a large api and database.
