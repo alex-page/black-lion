@@ -1,2 +1,2 @@
 # got-gw2api
-Test `got` with an API
+> Test `got` with an API
