@@ -118,3 +118,4 @@ var GetBulkData = exports.GetBulkData = function GetBulkData(url, totalItems) {
 		});
 	});
 };
+//# sourceMappingURL=get.js.map

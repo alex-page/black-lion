@@ -40,14 +40,6 @@ export const SETTINGS = {
 			items: 'https://api.guildwars2.com/v2/items',
 			limit: 200,
 		},
-		got: {
-			default: {
-				json: true,
-			},
-			totalPages: {
-
-			}
-		}
 	},
 
 

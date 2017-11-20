@@ -162,3 +162,4 @@ var Log = exports.Log = {
 		console.log('\n');
 	}
 };
+//# sourceMappingURL=helper.js.map

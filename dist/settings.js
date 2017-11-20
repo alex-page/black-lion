@@ -45,12 +45,6 @@ var SETTINGS = exports.SETTINGS = {
 			commerce: 'https://api.guildwars2.com/v2/commerce/prices',
 			items: 'https://api.guildwars2.com/v2/items',
 			limit: 200
-		},
-		got: {
-			default: {
-				json: true
-			},
-			totalPages: {}
 		}
 	},
 
@@ -86,3 +80,4 @@ var SETTINGS = exports.SETTINGS = {
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
+//# sourceMappingURL=settings.js.map
