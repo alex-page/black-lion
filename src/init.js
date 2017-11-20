@@ -13,13 +13,21 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS } from './settings';
-import { Log } from './helper';
-import { GotData } from './gotdata';
+import { SETTINGS }                   from './settings';
+import { Log }                        from './helper';
+import { GetTotalPages, GetBulkData } from './get';
 
 
-GotData( `${ SETTINGS.get().api.commerce }`, SETTINGS.get().got )
-	.then( data => Log.done( `Got ${ data.length } item id's...`) )
-	.catch( error => Log.error( `oh no: ${ error }` ) );
+// Check if the user is in verbose mode
+if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
+	Log.verboseMode = true;
+}
+
+Log.welcome( `Black Lion: Starting the feast` );
+
+GetTotalPages( SETTINGS.get().api.commerce )
+	.then( totalPages => GetBulkData( SETTINGS.get().api.items, totalPages ) )
+	.then( data => Log.done( `The lions are full and go to sleep` ) )
+	.catch( error => Log.error( `The lions went hungry: ${ error }` ) );
 
 

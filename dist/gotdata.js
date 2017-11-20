@@ -15,7 +15,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GotData = undefined;
+exports.GetData = undefined;
 
 var _got = require('got');
 
@@ -28,10 +28,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * GotData -
  *
- * @type {string} url     -
- * @type {object} options -
+ * @type {string} url     - The URL to get data from
+ * @type {object} options - See the options here https://github.com/sindresorhus/got#api
  */
-var GotData = exports.GotData = function GotData(url, options) {
+var GetData = exports.GetData = function GetData(url, options) {
   _helper.Log.verbose('Got data from: ' + url);
 
   return new Promise(function (resolve, reject) {

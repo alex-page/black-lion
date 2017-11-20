@@ -96,7 +96,7 @@ var Log = exports.Log = {
   * @param  {string} text - The text you want to log
   */
 	welcome: function welcome(text) {
-		console.info(' \uD83D\uDD25\uD83D\uDD25\uD83D\uDD25        ' + Style.bold('' + text));
+		console.info(' \uD83E\uDD81\uD83E\uDD81\uD83E\uDD81        ' + Style.bold('' + text));
 	},
 
 	/**
@@ -114,7 +114,7 @@ var Log = exports.Log = {
   * @param  {string} text - The text you want to log with the error
   */
 	error: function error(text) {
-		console.error(' \uD83D\uDD25 \uD83D\uDD25        ' + Style.red('ERROR:   ' + text));
+		console.error(' \uD83E\uDD81 \uD83E\uDD81        ' + Style.red('ERROR:   ' + text));
 	},
 
 	/**
@@ -123,7 +123,7 @@ var Log = exports.Log = {
   * @param  {string}  text - The text you want to log
   */
 	info: function info(text) {
-		console.info(' \uD83D\uDD14 \uD83D\uDD25        INFO:    ' + text);
+		console.info(' \uD83D\uDD14 \uD83E\uDD81        INFO:    ' + text);
 	},
 
 	/**
@@ -132,7 +132,7 @@ var Log = exports.Log = {
   * @param  {string}  text - The text you want to log
   */
 	ok: function ok(text) {
-		console.info(' \u2714 \uD83D\uDD25        ' + Style.green('OK:      ' + text));
+		console.info(' \u2714 \uD83E\uDD81        ' + Style.green('OK:      ' + text));
 	},
 
 	/**
@@ -141,7 +141,7 @@ var Log = exports.Log = {
   * @param  {string}  text - The text you want to log
   */
 	done: function done(text) {
-		console.info(' \uD83D\uDE80 \uD83D\uDD25        ' + Style.green(Style.bold(text)));
+		console.info(' \uD83D\uDE80 \uD83E\uDD81        ' + Style.green(Style.bold(text)));
 	},
 
 	/**
@@ -151,7 +151,7 @@ var Log = exports.Log = {
   */
 	verbose: function verbose(text) {
 		if (Log.verboseMode) {
-			console.info(' \uD83D\uDE4A \uD83D\uDD25        ' + Style.gray('VERBOSE: ' + text));
+			console.info(' \uD83D\uDE4A \uD83E\uDD81        ' + Style.gray('VERBOSE: ' + text));
 		}
 	},
 

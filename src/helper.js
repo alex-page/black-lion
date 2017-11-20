@@ -74,7 +74,7 @@ export const Log = {
 	 * @param  {string} text - The text you want to log
 	 */
 	welcome: ( text ) => {
-		console.info(` 🔥🔥🔥        ${ Style.bold(`${ text }`) }`);
+		console.info(` 🦁🦁🦁        ${ Style.bold(`${ text }`) }`);
 	},
 
 	/**
@@ -92,7 +92,7 @@ export const Log = {
 	 * @param  {string} text - The text you want to log with the error
 	 */
 	error: ( text ) => {
-		console.error(` 🔥 🔥        ${ Style.red(`ERROR:   ${ text }`) }`);
+		console.error(` 🦁 🦁        ${ Style.red(`ERROR:   ${ text }`) }`);
 	},
 
 	/**
@@ -101,7 +101,7 @@ export const Log = {
 	 * @param  {string}  text - The text you want to log
 	 */
 	info: ( text ) => {
-		console.info(` 🔔 🔥        INFO:    ${ text }`);
+		console.info(` 🔔 🦁        INFO:    ${ text }`);
 	},
 
 	/**
@@ -110,7 +110,7 @@ export const Log = {
 	 * @param  {string}  text - The text you want to log
 	 */
 	ok: ( text ) => {
-		console.info(` ✔ 🔥        ${ Style.green(`OK:      ${ text }`) }`);
+		console.info(` ✔ 🦁        ${ Style.green(`OK:      ${ text }`) }`);
 	},
 
 	/**
@@ -119,7 +119,7 @@ export const Log = {
 	 * @param  {string}  text - The text you want to log
 	 */
 	done: ( text ) => {
-		console.info(` 🚀 🔥        ${ Style.green( Style.bold( text ) ) }`);
+		console.info(` 🚀 🦁        ${ Style.green( Style.bold( text ) ) }`);
 	},
 
 	/**
@@ -129,7 +129,7 @@ export const Log = {
 	 */
 	verbose: ( text ) => {
 		if( Log.verboseMode ) {
-			console.info(` 🙊 🔥        ${ Style.gray(`VERBOSE: ${ text }`) }`);
+			console.info(` 🙊 🦁        ${ Style.gray(`VERBOSE: ${ text }`) }`);
 		}
 	},
 

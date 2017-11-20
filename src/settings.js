@@ -36,11 +36,17 @@ export const SETTINGS = {
 	 */
 	defaults: {
 		api: {
-			commerce: 'https://api.guildwars2.com/v2/commerce/listings/',
-			items: 'https://api.guildwars2.com/v2/items/',
+			commerce: 'https://api.guildwars2.com/v2/commerce/prices',
+			items: 'https://api.guildwars2.com/v2/items',
+			limit: 200,
 		},
 		got: {
-			json: true
+			default: {
+				json: true,
+			},
+			totalPages: {
+
+			}
 		}
 	},
 
