@@ -23,7 +23,7 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 	Log.verboseMode = true;
 }
 
-Log.welcome( `Black Lion: Starting the feast` );
+Log.welcome( `Starting the feast` );
 
 GetTotalPages( SETTINGS.get().api.commerce )
 	.then( totalPages => GetBulkData( SETTINGS.get().api.commerce, totalPages ) )
