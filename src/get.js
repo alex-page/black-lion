@@ -76,12 +76,16 @@ export const GetTotalPages = ( url ) => {
  * @returns {Promise}           - The data from all of the requests
  */
 export const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limit ) => {
-	Log.verbose( `GetBulkData   - Searching ${ totalItems } meals for tasty treats` );
+	Log.verbose( `GetBulkData   - Serving ${ totalItems } meals` );
 
 	return new Promise( ( resolve, reject ) => {
 
 		// Get total requests and remove decimal
-		const totalRequests = ( totalItems / apiLimit ) | 0;
+		let totalRequests = ( totalItems / apiLimit ) | 0;
+		if ( Log.verboseMode ) {
+			totalRequests = 1;
+		}
+
 		const dataBundle = [];
 		let   page = 0;
 
@@ -107,6 +111,5 @@ export const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limi
 			.catch( error => reject( error ) );
 
 	})
-
 }
 
