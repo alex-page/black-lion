@@ -83,6 +83,7 @@ export const TimestampCommerce = ( data ) => {
 
 /**
  * MergeDay - Merges items with the same day timestamp
+ * Based off https://codereview.stackexchange.com/questions/141530/calculate-average-of-array-of-objects-per-key-value-using-reduce
  *
  * @param {Object} data             - The data to be formatted
  * @param {String} data.id          - The item ID
@@ -106,8 +107,6 @@ export const MergeDay = ( data ) => {
 		if ( previous[ date ] === undefined ){
 			previous[ date ] = {};
 		}
-
-		console.log( previous );
 
 		if( key in previous[ date ] ) {
 			previous[ date ][ key ].value += data.rawdata[ timestamp ][ key ];
