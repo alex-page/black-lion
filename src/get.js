@@ -1,8 +1,10 @@
 /***************************************************************************************************************************************************************
  *
- * gotdata.js
+ * get.js
  *
- * GotData -
+ * GetData       - Gets data body from a url
+ * GetTotalPages - Does a small request to get the total data items ( x-result-total )
+ * GetBulkData   - Gets a lot of data from a url
  *
  **************************************************************************************************************************************************************/
 
@@ -26,10 +28,10 @@ import { SETTINGS } from './settings';
 /**
  * GetData - Gets data body from a url
  *
- * @type   {String} url        - The URL to get data from
- * @type   {Object} option     - The options from the https://github.com/sindresorhus/got
+ * @param    {String} url        - The URL to get data from
+ * @param    {Object} option     - The options from the https://github.com/sindresorhus/got
  *
- * @return {Promise}           - The data body
+ * @returns {Promise}           - The data body
  */
 export const GetData = ( url, option ) => {
 	Log.verbose( `GetData       - Serving meal #${ option.query.page + 1 } from: ${ url }.` );
@@ -44,9 +46,9 @@ export const GetData = ( url, option ) => {
 /**
  * GetTotalPages - Does a small request to get the total data items ( x-result-total )
  *
- * @type   {String} url - The URL to get data from
+ * @param    {String} url - The URL to get data from
  *
- * @return {Promise}    - The total number of data items
+ * @returns {Promise}    - The total number of data items
  */
 export const GetTotalPages = ( url ) => {
 	Log.verbose( `GetTotalPages - Counting the number of meals.` );
@@ -67,11 +69,11 @@ export const GetTotalPages = ( url ) => {
 /**
  * GetBulkData - Gets a lot of data from a url
  *
- * @type   {String} url        - The URL to get data from
- * @type   {Number} totalItems - The total number of items to get data for
- * @type   {Number} apiLimit   - The number of items that can be requested
+ * @param    {String} url        - The URL to get data from
+ * @param    {Number} totalItems - The total number of items to get data for
+ * @param    {Number} apiLimit   - The number of items that can be requested
  *
- * @return {Promise}           - The data from all of the requests
+ * @returns {Promise}           - The data from all of the requests
  */
 export const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limit ) => {
 	Log.verbose( `GetBulkData   - Searching ${ totalItems } meals for tasty treats` );
