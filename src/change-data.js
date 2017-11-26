@@ -1,8 +1,8 @@
 /***************************************************************************************************************************************************************
  *
- * formatData.js
+ * change-data.js
  *
- * FormatAsync       - Format the data in an async way
+ * ChangeAsync       - Change the data in an async way
  * TimestampCommerce - Timestamps the data
  *
  **************************************************************************************************************************************************************/
@@ -24,15 +24,15 @@ import { Log } from './helper';
 
 
 /**
- * TimestampData
+ * ChangeAsync
  *
  * @param   {Object}   data          - The data to get the timestamp added to it
  * @param   {Function} FormatPattern - The function to format the data
  *
  * @returns {Promise}
  */
-export const FormatAsync = ( data, FormatPattern ) => {
-	Log.verbose( `TimestampData - Adding the time of the meal` );
+export const ChangeAsync = ( data, FormatPattern ) => {
+	Log.verbose( `ChangeAsync - Changing the data asynchonously` );
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -45,12 +45,8 @@ export const FormatAsync = ( data, FormatPattern ) => {
 
 		// Once iterated resolve/reject promise
 		( error, results ) => {
-			if ( error ) {
-				reject( error );
-			}
-			else {
-				resolve( results );
-			}
+			if ( error ) reject( error )
+			else resolve( results );
 		});
 	});
 }
@@ -68,14 +64,71 @@ export const FormatAsync = ( data, FormatPattern ) => {
  * @returns {Object}                - The newly formatted object
  */
 export const TimestampCommerce = ( data ) => {
+	// No log here as it gets looped a lot!
+
 	return {
 		id: data.id,
 		'whitelisted': data.whitelisted,
-		data: {
+		rawdata: {
 			[ Date.now() ]: {
-				'buys': data.buys,
-				'sells': data.sells,
+				'buysQuantity' : data.buys.quantity,
+				'buysPrice'    : data.buys.unit_price,
+				'sellsQuantity': data.sells.quantity,
+				'sellsPrice'   : data.sells.unit_price,
 			}
 		}
 	}
+}
+
+
+/**
+ * MergeDay - Merges items with the same day timestamp
+ *
+ * @param {Object} data             - The data to be formatted
+ * @param {String} data.id          - The item ID
+ * @param {Object} data.buys        - The items buy data
+ * @param {Object} data.sells       - The items sell data
+ * @param {Object} data.whitelisted - Status of the item
+ *
+ * @returns {Object}                - The newly formatted object
+ */
+export const MergeDay = ( data ) => {
+	// MergeDay - Merging item buy/sell data if it's on the same day
+
+	console.log( `===` );
+
+	const merged = Object.keys( data.rawdata ).reduce( ( previous, timestamp ) => {
+
+		const date = ( new Date( timestamp * 1 ) ).toJSON().slice( 0, 13 );
+
+		for ( let key in data.rawdata[ timestamp ] ) {
+
+		if ( previous[ date ] === undefined ){
+			previous[ date ] = {};
+		}
+
+		console.log( previous );
+
+		if( key in previous[ date ] ) {
+			previous[ date ][ key ].value += data.rawdata[ timestamp ][ key ];
+			previous[ date ][ key ].count += 1;
+		}
+		else {
+			previous[ date ] = {
+				[ key ]: {
+					value: data.rawdata[ timestamp ][ key ],
+					count: 1,
+				}
+			}
+		}
+
+			// console.log( previous );
+		}
+
+		console.log( previous )
+
+		return previous;
+
+	}, {}); // Set initial value to empty object
+
 }
