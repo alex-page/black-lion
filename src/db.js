@@ -23,15 +23,15 @@ import { Log }      from './helper';
 
 
 /**
- * UpdateData - updates data into the RethinkDB database
+ * InsertData - Inserts data into the RethinkDB database
  * @param  {Object} data      - The data to be inserted into the db
  * @param  {Object} dbOptions - Information to connect to the db
  * @param  {String} table     - The table for the data to go into
  *
  * @returns {Promise}
  */
-export const UpdateData = ( data, dbOptions, table ) => {
-	Log.verbose( `UpdateData - Saving the leftovers for later` );
+export const InsertData = ( data, dbOptions, table ) => {
+	Log.verbose( `InsertData    @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -41,28 +41,21 @@ export const UpdateData = ( data, dbOptions, table ) => {
 
 				RethinkDB
 					.table( table )
-					.update( data, { conflict: 'replace' } )
+					.insert( data, { conflict: 'update' } )
 					.run( connection )
 					.then( results => {
-
-						let messages = '';
-
-						// For each result check if there is data and log the correct message
-						Object.keys( results ).map( result => {
-							if ( results[ result ] !== 0 ) {
-								if( result === 'error' ){
-									reject( `There was ${ result.error } issues adding the items:\n\n${ result.first_error }` )
-								}
-								else {
-									messages += `${ results[ result ] } items ${ result }\n`;
-								}
-							}
-						});
-
-						console.log( messages );
-
-						resolve( messages );
-
+						// Check that there were no errors inserting the data
+						if ( results.errors !== 0 ) {
+							reject( `There was ${ results.errors } issues adding the items:\n\n${ results.first_error }` )
+						}
+						// Close the connection and send back the results
+						else {
+							Object.keys( results ).map( result => {
+								Log.verbose( `${ result }: ${ results[result] }`)
+							});
+							connection.close();
+							resolve( results );
+						}
 					})
 					.catch( error => reject( error ) )
 
