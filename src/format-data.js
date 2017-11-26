@@ -2,8 +2,8 @@
  *
  * formatData.js
  *
- * FormatAsync - Format the data in an async way
- * Timestamp   - Timestamps the data
+ * FormatAsync       - Format the data in an async way
+ * TimestampCommerce - Timestamps the data
  *
  **************************************************************************************************************************************************************/
 
@@ -57,7 +57,7 @@ export const FormatAsync = ( data, FormatPattern ) => {
 
 
 /**
- * Timestamp - Timestamps the data
+ * TimestampCommerce - Timestamps the data
  *
  * @param {Object} data             - The data to be formatted
  * @param {String} data.id          - The item ID
@@ -67,13 +67,14 @@ export const FormatAsync = ( data, FormatPattern ) => {
  *
  * @returns {Object}                - The newly formatted object
  */
-export const Timestamp = ( data ) => {
+export const TimestampCommerce = ( data ) => {
 	return {
-		[ data.id ]: {
+		id: data.id,
+		'whitelisted': data.whitelisted,
+		data: {
 			[ Date.now() ]: {
 				'buys': data.buys,
 				'sells': data.sells,
-				'whitelisted': data.whitelisted,
 			}
 		}
 	}
