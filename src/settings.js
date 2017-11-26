@@ -38,7 +38,7 @@ export const SETTINGS = {
 		api: {
 			commerce: 'https://api.guildwars2.com/v2/commerce/prices',
 			items: 'https://api.guildwars2.com/v2/items',
-			limit: 200,
+			limit: 5,
 		},
 		db: {
 			db: 'blacklion',
