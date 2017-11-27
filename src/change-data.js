@@ -96,38 +96,44 @@ export const TimestampCommerce = ( data ) => {
 export const MergeDay = ( data ) => {
 	// MergeDay - Merging item buy/sell data if it's on the same day
 
-	console.log( `===` );
-
 	const merged = Object.keys( data.rawdata ).reduce( ( previous, timestamp ) => {
 
-		const date = ( new Date( timestamp * 1 ) ).toJSON().slice( 0, 13 );
+		const date    = ( new Date( timestamp * 1 ) ).toJSON().slice( 0, 16 );
+		const pastDay =
 
-		for ( let key in data.rawdata[ timestamp ] ) {
 
-		if ( previous[ date ] === undefined ){
+		// Add the day if it doesn't exist
+		if( !( date in previous ) ) {
 			previous[ date ] = {};
 		}
 
-		if( key in previous[ date ] ) {
-			previous[ date ][ key ].value += data.rawdata[ timestamp ][ key ];
-			previous[ date ][ key ].count += 1;
-		}
-		else {
-			previous[ date ] = {
-				[ key ]: {
-					value: data.rawdata[ timestamp ][ key ],
-					count: 1,
-				}
+		// Go through the keys and get the total and the number of iterations
+		for ( let key in data.rawdata[ timestamp ] ) {
+
+			if ( typeof data.rawdata[ timestamp ][ key ] !== 'number' ) {
+				Log.error( `The key to merge must be a number got: ${ data.rawdata[ timestamp ][ key ] }` );
+			}
+
+			// If the key already is in previous, add to it
+			if( key in previous[ date ] ) {
+				// Add the previous to the current, get the average, remove the decimal
+				previous[ date ][ key ] = ( ( previous[ date ][ key ] + data.rawdata[ timestamp ][ key ] ) / 2 ) | 0;
+			}
+
+			// The key isn't in previous, create new instance
+			else {
+				previous[ date ][ key ] =  data.rawdata[ timestamp ][ key ];
 			}
 		}
-
-			// console.log( previous );
-		}
-
-		console.log( previous )
 
 		return previous;
 
 	}, {}); // Set initial value to empty object
 
+
+	return {
+		id: data.id,
+		data: merged,
+		rawdata: {}
+	}
 }

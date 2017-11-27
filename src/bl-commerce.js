@@ -35,7 +35,7 @@ const GetCommerceData = () => {
 	GetTotalPages( SETTINGS.get().api.commerce )
 		.then(  totalPages      => GetBulkData( SETTINGS.get().api.commerce, totalPages ) )
 		.then(  unformattedData => ChangeAsync( unformattedData, TimestampCommerce ) )
-		.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
+		.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'update' ) )
 		.then(  results         => Log.done( `The lions are full and go to sleep` ) )
 		.catch( error           => Log.error( `The lions went hungry: ${ error }` ) );
 };

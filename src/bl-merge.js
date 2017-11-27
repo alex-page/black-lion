@@ -15,7 +15,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { SETTINGS }              from './settings';
 import { Log }                   from './helper';
-import { GetDB }                 from './db';
+import { GetDB, InsertDB }       from './db';
 import { ChangeAsync, MergeDay } from './change-data';
 
 
@@ -33,7 +33,7 @@ const MergeDataInit = () => {
 
 	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
 		.then(  data   => ChangeAsync( data, MergeDay ) )
-		// .then(  data   => console.log( data ) )
+		.then(  data   => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'replace' ) )
 		.then(  ()     => Log.done( `Merge completed` ) )
 		.catch( error  => Log.error( `Merge failed: ${ error }` ) );
 };

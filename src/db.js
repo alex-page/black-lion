@@ -32,7 +32,7 @@ import { Log }   from './helper';
  *
  * @returns {Promise}
  */
-export const InsertDB = ( data, dbOptions, table ) => {
+export const InsertDB = ( data, dbOptions, table, conflict ) => {
 	Log.verbose( `InsertDB      @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
 	return new Promise( ( resolve, reject ) => {
@@ -43,7 +43,7 @@ export const InsertDB = ( data, dbOptions, table ) => {
 
 				RethinkDB
 					.table( table )
-					.insert( data, { conflict: 'update' } )
+					.insert( data, { conflict: conflict } )
 					.run( connection )
 					.then( HandleResults )
 					.then( () => connection.close() )
