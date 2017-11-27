@@ -32,7 +32,7 @@ import { Log }   from './helper';
  *
  * @returns {Promise}
  */
-export const InsertDB = ( data, dbOptions, table, conflict ) => {
+export const InsertDB = ( data, dbOptions, table, conflict = 'update' ) => {
 	Log.verbose( `InsertDB      @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
 	return new Promise( ( resolve, reject ) => {
@@ -64,7 +64,7 @@ export const InsertDB = ( data, dbOptions, table, conflict ) => {
  * @return {Promise}
  */
 export const GetDB = ( dbOptions, table ) => {
-	Log.verbose( `GetDB - Fetching data from DB` );
+	Log.verbose( `GetDB         @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -94,7 +94,7 @@ export const GetDB = ( dbOptions, table ) => {
  * @param   {Number} results.error       - Number of errors found
  * @param   {String} results.first_error - The first error found
  *
- * @returns {Promise}
+ * @returns {Promise}hy 90
  */
 const HandleResults = ( results ) => {
 	Log.verbose( `Handling results` );

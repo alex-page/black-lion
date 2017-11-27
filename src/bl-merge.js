@@ -13,10 +13,11 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS }              from './settings';
-import { Log }                   from './helper';
-import { GetDB, InsertDB }       from './db';
-import { ChangeAsync, MergeDay } from './change-data';
+import { SETTINGS }        from './settings';
+import { Log }             from './helper';
+import { GetDB, InsertDB } from './db';
+import { AsyncMapFormat }  from './async';
+import { MergeCommerce }   from './merge';
 
 
 // Check if the user is in verbose mode
@@ -25,17 +26,21 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 }
 
 
+// Time to the day when the file was ran
+export const today = ( new Date() ).toJSON().slice( 0, 10 );
+
+
 /**
  * MergeData - Merge data that is on the same day
  */
-const MergeDataInit = () => {
+const MergeData = () => {
 	Log.welcome( `Starting the merge` );
 
 	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
-		.then(  data   => ChangeAsync( data, MergeDay ) )
-		.then(  data   => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'replace' ) )
+		.then(  data   => AsyncMapFormat( data, MergeCommerce ) )
+		.then(  data   => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ), 'replace' )
 		.then(  ()     => Log.done( `Merge completed` ) )
 		.catch( error  => Log.error( `Merge failed: ${ error }` ) );
 };
 
-MergeDataInit();
+MergeData();
