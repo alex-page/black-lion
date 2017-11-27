@@ -99,7 +99,6 @@ export const MergeDay = ( data ) => {
 	const merged = Object.keys( data.rawdata ).reduce( ( previous, timestamp ) => {
 
 		const date    = ( new Date( timestamp * 1 ) ).toJSON().slice( 0, 16 );
-		const pastDay =
 
 
 		// Add the day if it doesn't exist
