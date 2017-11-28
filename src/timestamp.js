@@ -11,7 +11,7 @@
 
 
 // Time to minute when the file was ran
-export const now = ( new Date() ).toJSON().slice( 0, 16 );
+const now = ( new Date() ).toJSON().slice( 0, 16 );
 
 
 /**
@@ -26,7 +26,6 @@ export const now = ( new Date() ).toJSON().slice( 0, 16 );
  * @returns {Object}                - The newly formatted object
  */
 export const TimestampCommerce = ( data ) => {
-	// No log here as it gets looped a lot!
 
 	return {
 		id: data.id,

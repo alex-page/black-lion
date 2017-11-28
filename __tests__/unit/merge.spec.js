@@ -25,19 +25,19 @@ test( 'MergeCommerce: past dates should get merged into data from rawdata', () =
 		"data": {},
 		"id": 70,
 		"rawdata": {
-			"2017-11-27T09:40": {
+			"2017-11-25T09:40": {
 				"buysPrice": 1,
 				"buysQuantity": 2,
 				"sellsPrice": 3,
 				"sellsQuantity": 4
 			},
-			"2017-11-27T09:43": {
+			"2017-11-25T09:43": {
 				"buysPrice": 5,
 				"buysQuantity": 6,
 				"sellsPrice": 7,
 				"sellsQuantity": 8
 			},
-			"2017-11-27T09:46": {
+			"2017-11-25T09:46": {
 				"buysPrice": 9,
 				"buysQuantity": 10,
 				"sellsPrice": 11,
@@ -48,27 +48,26 @@ test( 'MergeCommerce: past dates should get merged into data from rawdata', () =
 	};
 
 	const result = {
+		"id": 70,
 		"data": {
-			"2017-11-27": {
+			"2017-11-25": {
 				"buysPrice": 6,
 				"buysQuantity": 7,
 				"sellsPrice": 8,
 				"sellsQuantity": 9,
 			},
 		},
-		"id": 70,
 		"rawdata": {}
 	};
 
 	expect( MergeCommerce( test ) ).toEqual( result );
-
 });
 
 
 test( 'MergeCommerce: merge data should not merge todays data', () => {
 
-	const today     = ( new Date() ).toJSON().slice( 0, 16 );
-	const yesterday = ( new Date( Date.now() + 1*24*60*60*1000 ) ).toJSON().slice( 0, 16 )
+	const today     = new Date();
+	const yesterday = new Date( today.setDate( today.getDate() -.5 ) );
 
 	const test = {
 		"data": {},
@@ -86,40 +85,40 @@ test( 'MergeCommerce: merge data should not merge todays data', () => {
 				"sellsPrice": 7,
 				"sellsQuantity": 8
 			},
-			[ today ]: {
-				"buysPrice": 9,
-				"buysQuantity": 10,
-				"sellsPrice": 11,
-				"sellsQuantity": 12
-			},
-			[ yesterday ]: {
+			[ yesterday.toJSON().slice( 0, 16 ) ]: {
 				"buysPrice": 13,
 				"buysQuantity": 14,
 				"sellsPrice": 15,
 				"sellsQuantity": 16
+			},
+			[ today.toJSON().slice( 0, 16 ) ]: {
+				"buysPrice": 9,
+				"buysQuantity": 10,
+				"sellsPrice": 11,
+				"sellsQuantity": 12
 			}
 		},
 		"whitelisted": false
 	};
 
 	const result = {
+		"id": 70,
 		"data": {
 			"2015-11-20": {
 				"buysPrice": 3,
 				"buysQuantity": 4,
 				"sellsPrice": 5,
 				"sellsQuantity": 6,
-			},
-			[ yesterday.slice( 0, 10 ) ]: {
+			}
+		},
+		"rawdata": {
+			[ yesterday.toJSON().slice( 0, 16 ) ]: {
 				"buysPrice": 13,
 				"buysQuantity": 14,
 				"sellsPrice": 15,
 				"sellsQuantity": 16
 			},
-		},
-		"id": 70,
-		"rawdata": {
-			[ today ]: {
+			[ today.toJSON().slice( 0, 16 ) ]: {
 				"buysPrice": 9,
 				"buysQuantity": 10,
 				"sellsPrice": 11,

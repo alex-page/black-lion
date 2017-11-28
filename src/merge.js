@@ -11,7 +11,8 @@
 
 
 // Time to the day when the file was ran
-export const today = ( new Date() ).toJSON().slice( 0, 10 );
+const today       = new Date();
+const yesterday   = new Date( today.setDate( today.getDate() - 1 ) );
 
 
 /**
@@ -31,12 +32,10 @@ export const MergeCommerce = ( data ) => {
 
 	const merged = Object.keys( data.rawdata ).reduce( ( previous, timestamp ) => {
 
-		// Get the date e.g. ( 2017-11-27 ) from the timestamp
-		const date = timestamp.slice( 0, 10 );
-		previous.rawdata = {};
+		// If the items data is less then yesterday
+		if ( new Date( timestamp ) <= yesterday ) {
 
-		// If the items data is not from today
-		if ( date !== today ) {
+			const date = timestamp.slice( 0, 10 );
 
 			// Add the day if it doesn't exist
 			if( !( date in previous.data ) ) {
@@ -67,10 +66,13 @@ export const MergeCommerce = ( data ) => {
 
 		return previous;
 
-	}, { data: {} }); // Set initial value to empty data object
-
-	// Add the item ID to the merged object
-	merged.id = data.id;
+	},
+	// Set the initial value of previous for the reduce function
+	{
+		id: data.id,
+		data: {},
+		rawdata: {},
+	});
 
 	return merged;
 }
