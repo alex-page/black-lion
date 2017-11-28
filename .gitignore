@@ -3,3 +3,4 @@ dist
 .DS_Store
 .vscode
 rethinkdb_data
+coverage
