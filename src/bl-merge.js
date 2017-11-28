@@ -26,10 +26,6 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 }
 
 
-// Time to the day when the file was ran
-export const today = ( new Date() ).toJSON().slice( 0, 10 );
-
-
 /**
  * MergeData - Merge data that is on the same day
  */

@@ -27,10 +27,6 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 }
 
 
-// Time to minute when the file was ran
-export const now = ( new Date() ).toJSON().slice( 0, 16 );
-
-
 /**
  * GetCommerceData - Gets the commerce data from the API
  */

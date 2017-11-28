@@ -10,10 +10,8 @@
 'use strict';
 
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Local
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { today } from './bl-merge';
+// Time to the day when the file was ran
+export const today = ( new Date() ).toJSON().slice( 0, 10 );
 
 
 /**
@@ -35,22 +33,20 @@ export const MergeCommerce = ( data ) => {
 
 		// Get the date e.g. ( 2017-11-27 ) from the timestamp
 		const date = timestamp.slice( 0, 10 );
-		let rawdata = {};
+		previous.rawdata = {};
 
 		// If the items data is not from today
 		if ( date !== today ) {
 
 			// Add the day if it doesn't exist
-			if( !( date in previous ) ) {
-				previous[ date ] = {};
+			if( !( date in previous.data ) ) {
+				previous.data = {
+					[ date ]: {}
+				};
 			}
 
 			// Go through the keys and get the total and the number of iterations
 			for ( let key in data.rawdata[ timestamp ] ) {
-
-				if ( typeof data.rawdata[ timestamp ][ key ] !== 'number' ) {
-					Log.error( `The key to merge must be a number got: ${ data.rawdata[ timestamp ][ key ] }` );
-				}
 
 				// If the key already is in previous, add to it
 				if( key in previous.data[ date ] ) {
@@ -66,12 +62,12 @@ export const MergeCommerce = ( data ) => {
 		}
 		else {
 			// Add the rawdata to previous as its fresh data
-			previous.rawdata = data.rawdata;
+			previous.rawdata[ timestamp ] = data.rawdata[ timestamp ];
 		}
 
 		return previous;
 
-	}, {}); // Set initial value to empty object
+	}, { data: {} }); // Set initial value to empty data object
 
 	// Add the item ID to the merged object
 	merged.id = data.id;

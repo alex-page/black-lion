@@ -21,7 +21,7 @@ import { AsyncMapFormat } from '../../src/async';
 // ----------------------------------------------------------------
 // AsyncMapFormat
 // ----------------------------------------------------------------
-test('AsyncMapFormat: should take a function and data and run it asynchronously', () => {
+test( 'AsyncMapFormat: should take a function and data and run it asynchronously', () => {
 
 	const test = [{ "a": 24, "b": 15 }, { "a": 12, "b": 99 }, { "a": 1, "b": 1 } ];
 
@@ -37,7 +37,7 @@ test('AsyncMapFormat: should take a function and data and run it asynchronously'
 });
 
 
-test('AsyncMapFormat: should throw an error if the result of the function is not truthy', () => {
+test( 'AsyncMapFormat: should throw an error if the result of the function is not truthy', () => {
 
 	const test = [{ "a": 24, "b": 15 } ];
 

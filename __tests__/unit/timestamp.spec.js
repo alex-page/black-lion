@@ -1,11 +1,11 @@
 /***************************************************************************************************************************************************************
  *
- * async.js unit tests
+ * timestamp.js unit tests
  *
  * @file src/async.js
  *
  * Tested methods:
- * - AsyncMapFormat
+ * - TimestampCommerce
  *
  **************************************************************************************************************************************************************/
 
@@ -13,37 +13,43 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { AsyncMapFormat } from '../../src/async';
+import { TimestampCommerce } from '../../src/timestamp';
 
 
 // ----------------------------------------------------------------
-// AsyncMapFormat
+// TimestampCommerce
 // ----------------------------------------------------------------
-test( 'AsyncMapFormat: should take a function and data and run it asynchronously', () => {
+test( 'TimestampCommerce: should format and add the timestamp', () => {
 
-	const test = [{ "a": 24, "b": 15 }, { "a": 12, "b": 99 }, { "a": 1, "b": 1 } ];
+	const now = ( new Date() ).toJSON().slice( 0, 16 );
 
-	const result = [ 39, 111, 2 ].sort();
-
-	const TestFunction = ( item ) => {
-		return item.a + item.b;
+	const test = {
+		"id": 24,
+		"whitelisted": false,
+		"buys": {
+			"quantity": 35238,
+			"unit_price": 211
+		},
+		"sells": {
+			"quantity": 20568,
+			"unit_price": 548
+		}
 	};
 
-	AsyncMapFormat( test, TestFunction )
-		.then( data => expect( result ).toEqual( data.sort() ) )
-
-});
-
-
-test( 'AsyncMapFormat: should throw an error if the result of the function is not truthy', () => {
-
-	const test = [{ "a": 24, "b": 15 } ];
-
-	const TestFunction = ( item ) => {
-		return null;
+	const result = {
+		"id": 24,
+		"whitelisted": false,
+		"rawdata": {
+			[ now ]: {
+				"buysQuantity": 35238,
+				"buysPrice": 211,
+				"sellsQuantity": 20568,
+				"sellsPrice": 548
+			}
+		}
 	};
 
-	AsyncMapFormat( test, TestFunction )
-		.catch( error => expect( error ).toEqual( 'Issue with FormatPattern function.' ) );
+
+	expect( TimestampCommerce( test ) ).toEqual( result )
 
 });

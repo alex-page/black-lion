@@ -30,7 +30,7 @@ import { Log, Style } from '../../src/helper';
  * Log.verbose
  * Log.error
  **************************************************************************************************************************************************************/
-test('Log.message: should be formatted correctly', () => {
+test( 'Log.message: should be formatted correctly', () => {
 	console.log = jest.fn();
 
 	Log.message(`message test`);
@@ -42,7 +42,7 @@ test('Log.message: should be formatted correctly', () => {
 });
 
 
-test('Log.welcome: should be formatted correctly', () => {
+test( 'Log.welcome: should be formatted correctly', () => {
 	console.info = jest.fn();
 
 	Log.welcome(`welcome test`);
@@ -68,7 +68,7 @@ test('Log.welcome: should be formatted correctly', () => {
 });
 
 
-test('Log.error: should be formatted correctly', () => {
+test( 'Log.error: should be formatted correctly', () => {
 	console.error = jest.fn();
 
 	Log.error(`error test`);
@@ -80,7 +80,7 @@ test('Log.error: should be formatted correctly', () => {
 });
 
 
-test('Log.info: should be formatted correctly', () => {
+test( 'Log.info: should be formatted correctly', () => {
 	console.info = jest.fn();
 
 	Log.info(`info test`);
@@ -92,7 +92,7 @@ test('Log.info: should be formatted correctly', () => {
 });
 
 
-test('Log.ok: should be formatted correctly', () => {
+test( 'Log.ok: should be formatted correctly', () => {
 	console.info = jest.fn();
 
 	Log.ok(`ok test`);
@@ -104,7 +104,7 @@ test('Log.ok: should be formatted correctly', () => {
 });
 
 
-test('Log.done: should be formatted correctly', () => {
+test( 'Log.done: should be formatted correctly', () => {
 	console.info = jest.fn();
 
 	Log.done(`done test`);
@@ -116,7 +116,7 @@ test('Log.done: should be formatted correctly', () => {
 });
 
 
-test('Log.verbose: should not print if verboseMode is false', () => {
+test( 'Log.verbose: should not print if verboseMode is false', () => {
 	console.info = jest.fn();
 
 	Log.verbose(`verbose test fail`);
@@ -125,7 +125,7 @@ test('Log.verbose: should not print if verboseMode is false', () => {
 });
 
 
-test('Log.verbose: should should be formatted correctly', () => {
+test( 'Log.verbose: should should be formatted correctly', () => {
 	console.info = jest.fn();
 
 	Log.verboseMode = true;
@@ -138,7 +138,7 @@ test('Log.verbose: should should be formatted correctly', () => {
 });
 
 
-test('Log.space: should should be formatted correctly', () => {
+test( 'Log.space: should should be formatted correctly', () => {
 	console.log = jest.fn();
 
 	Log.space(`space test`);
@@ -159,23 +159,23 @@ test('Log.space: should should be formatted correctly', () => {
  * Style.[color|bold]
  * Style.[color] nesting
  **************************************************************************************************************************************************************/
-test('Style.parse - undefined argument should return empty string', () => {
+test( 'Style.parse - undefined argument should return empty string', () => {
 	expect( Style.parse( undefined ) ).toBe('');
 });
 
 
-test('Style.parse - start and end ansi code is correctly added', () => {
+test( 'Style.parse - start and end ansi code is correctly added', () => {
 	expect( Style.parse( 'TEST', '666m', '777m' ) ).toBe('\u001B[666mTEST\u001b[777m');
 });
 
 
-test('Style.parse - start and end ansi code can be nested', () => {
+test( 'Style.parse - start and end ansi code can be nested', () => {
 	expect( Style.parse( `TEST ${ Style.parse( 'SUBTEST', '666m', '777m' ) } STRING`, '666m', '777m' ) )
 		.toBe('\u001B[666mTEST \u001B[666mSUBTEST\u001B[666m STRING\u001b[777m');
 });
 
 
-test('Style: function should return correct string and colour', () => {
+test( 'Style: function should return correct string and colour', () => {
 	expect( Style.black('test black') ).toBe('\u001B[30mtest black\u001b[39m');
 	expect( Style.red('test red') ).toBe('\u001B[31mtest red\u001b[39m');
 	expect( Style.green('test green') ).toBe('\u001B[32mtest green\u001b[39m');
