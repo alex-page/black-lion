@@ -29,12 +29,13 @@ export const MergeCommerce = ( data, now ) => {
 	return new Promise( ( resolve, reject ) => {
 
 		if( typeof data !== 'object' || typeof now !== 'object' ) {
-			reject( 'Invalid data for MergeCommerce function' );
+			reject( `Invalid data: MergeCommerce function (ID: ${ data.id } )` );
 		}
 
-		const yesterday = new Date( now.setDate( now.getDate() - 1 ) );
+		const startData = data.data ? data.data : {};                   // If there is existing data use it, otherwise clean state
+		const yesterday = new Date( now.setDate( now.getDate() - 1 ) ); // Get yesterdays date
 
-		// Loop through the object and reduce it
+		// Reduce for each key in the data.rawdata
 		const mergedData = Object.keys( data.rawdata ).reduce( ( previous, timestamp ) => {
 
 			// If the items data is less then yesterday
@@ -45,9 +46,7 @@ export const MergeCommerce = ( data, now ) => {
 
 				// Add the day if it doesn't exist
 				if( !( date in previous.data ) ) {
-					previous.data = {
-						[ date ]: {}
-					};
+					previous.data[ date ] = {};
 				}
 
 				// Go through the keys and get the total and the number of iterations
@@ -56,12 +55,16 @@ export const MergeCommerce = ( data, now ) => {
 					// If the key already is in previous, add to it
 					if( key in previous.data[ date ] ) {
 						// Add the previous to the current, get the average, remove the decimal
-						previous.data[ date ][ key ] = ( ( previous.data[ date ][ key ] + data.rawdata[ timestamp ][ key ] ) / 2 ) | 0;
+						previous.data[ date ][ key ][ 'total' ] += previous.data[ date ][ 'total' ];
+						previous.data[ date ][ key ][ 'iterations' ] ++;
 					}
 
 					// The key isn't in previous, create new instance
 					else {
-						previous.data[ date ][ key ] =  data.rawdata[ timestamp ][ key ];
+						previous.data[ date ][ key ] = {
+							total: data.rawdata[ timestamp ][ key ],
+							iterations: 1,
+						};
 					}
 				}
 			}
@@ -77,11 +80,13 @@ export const MergeCommerce = ( data, now ) => {
 		// Set the initial value of previous for the reduce function
 		{
 			id: data.id,
-			data: {},
+			data: startData,
 			rawdata: {},
 		});
 
+		console.log( mergedData );
+
 		// Resolve the data
-		resolve( mergedData );
+		// resolve( mergedData );
 	})
 }

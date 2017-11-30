@@ -35,10 +35,10 @@ export const TimestampCommerce = ( data, now ) => {
 			whitelisted: data.whitelisted,
 			rawdata: {
 				[ now ]: {
-					buysQuantity : data.buys.quantity,
-					buysPrice    : data.buys.unit_price,
-					sellsQuantity: data.sells.quantity,
-					sellsPrice   : data.sells.unit_price,
+					buysQuantity  : data.buys.quantity,
+					buysPrice     : data.buys.unit_price,
+					sellsQuantity : data.sells.quantity,
+					sellsPrice    : data.sells.unit_price,
 				}
 			}
 		});
