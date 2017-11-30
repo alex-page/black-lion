@@ -39,7 +39,6 @@
 	},
 	"homepage": "https://github.com/alex-page/black-lion#readme",
 	"dependencies": {
-		"async": "^2.6.0",
 		"babel-cli": "^6.26.0",
 		"babel-preset-env": "^1.6.1",
 		"got": "^8.0.0",

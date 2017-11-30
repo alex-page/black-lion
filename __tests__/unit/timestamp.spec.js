@@ -50,6 +50,15 @@ test( 'TimestampCommerce: should format and add the timestamp', () => {
 	};
 
 
-	expect( TimestampCommerce( test ) ).toEqual( result )
+	TimestampCommerce( test, now )
+		.then( data => expect( data ).toEqual( result ) )
+		.catch( error => console.log( error ) );
+
+});
+
+test( 'TimestampCommerce: should error when object not sent', () => {
+
+	TimestampCommerce( false, false )
+		.catch( error => expect( error ).toEqual( 'Invalid object pushed into TimestampCommerce' ) );
 
 });

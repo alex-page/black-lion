@@ -10,10 +10,6 @@
 'use strict';
 
 
-// Time to minute when the file was ran
-const now = ( new Date() ).toJSON().slice( 0, 16 );
-
-
 /**
  * TimestampCommerce - Timestamps the data
  *
@@ -22,21 +18,30 @@ const now = ( new Date() ).toJSON().slice( 0, 16 );
  * @param {Object} data.buys        - The items buy data
  * @param {Object} data.sells       - The items sell data
  * @param {Object} data.whitelisted - Status of the item
+ * @param {Object} now              - The current time
  *
  * @returns {Object}                - The newly formatted object
  */
-export const TimestampCommerce = ( data ) => {
+export const TimestampCommerce = ( data, now ) => {
 
-	return {
-		id: data.id,
-		'whitelisted': data.whitelisted,
-		rawdata: {
-			[ now ]: {
-				'buysQuantity' : data.buys.quantity,
-				'buysPrice'    : data.buys.unit_price,
-				'sellsQuantity': data.sells.quantity,
-				'sellsPrice'   : data.sells.unit_price,
-			}
+	return new Promise( ( resolve, reject ) => {
+
+		if( !data || typeof data !== 'object' ) {
+			reject( 'Invalid object pushed into TimestampCommerce' );
 		}
-	}
+
+		resolve({
+			id: data.id,
+			whitelisted: data.whitelisted,
+			rawdata: {
+				[ now ]: {
+					buysQuantity : data.buys.quantity,
+					buysPrice    : data.buys.unit_price,
+					sellsQuantity: data.sells.quantity,
+					sellsPrice   : data.sells.unit_price,
+				}
+			}
+		});
+
+	})
 }
