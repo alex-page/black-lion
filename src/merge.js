@@ -32,7 +32,6 @@ export const MergeCommerce = ( data, now ) => {
 			reject( `Invalid data: MergeCommerce function (ID: ${ data.id } )` );
 		}
 
-		const startData = data.data ? data.data : {};                   // If there is existing data use it, otherwise clean state
 		const yesterday = new Date( now.setDate( now.getDate() - 1 ) ); // Get yesterdays date
 
 		// Reduce for each key in the data.rawdata
@@ -42,21 +41,40 @@ export const MergeCommerce = ( data, now ) => {
 			if ( new Date( timestamp ) < yesterday ) {
 
 				// Format the date for insertion into DB
-				const date = timestamp.slice( 0, 10 );
+				const date = timestamp.slice( 0, 10 );}
 
-				// Add the day if it doesn't exist
-				if( !( date in previous.data ) ) {
-					previous.data[ date ] = {};
+				// If data has a date that conflicts with raw data
+				if ( data.data[ date ] ) {
+
+					// Go through any matching data keys
+					for ( let key in data.data[ date ] ) {
+
+						// Add the data to the thingo
+						previous.data[ date ][ key ] = {
+							total: data.data[ timestamp ][ key ],
+							iterations: 1,
+						};
+					}
+
+				}
+				// Data is fine, please leave it
+				else {
+					previous.data[ timestamp ] = data.data[ timestamp ];
 				}
 
-				// Go through the keys and get the total and the number of iterations
+
+				// Add the day if it doesn't exist
+				if( !( date in previous.data ) ) { previous.data[ date ] = {};
+
+
+				// Go through the raw data keys and get the total and the number of iterations
 				for ( let key in data.rawdata[ timestamp ] ) {
 
 					// If the key already is in previous, add to it
 					if( key in previous.data[ date ] ) {
 						// Add the previous to the current, get the average, remove the decimal
-						previous.data[ date ][ key ][ 'total' ] += previous.data[ date ][ 'total' ];
-						previous.data[ date ][ key ][ 'iterations' ] ++;
+						previous.data[ date ][ key ].total += previous.data[ date ][ key ].total;
+						previous.data[ date ][ key ].iterations++;
 					}
 
 					// The key isn't in previous, create new instance
@@ -80,13 +98,13 @@ export const MergeCommerce = ( data, now ) => {
 		// Set the initial value of previous for the reduce function
 		{
 			id: data.id,
-			data: startData,
+			data: {},
 			rawdata: {},
 		});
 
-		console.log( mergedData );
+		// console.log( mergedData );
 
 		// Resolve the data
-		// resolve( mergedData );
+		resolve( mergedData );
 	})
 }

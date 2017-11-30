@@ -25,6 +25,12 @@ test( 'MergeCommerce: past dates should get merged into data from rawdata', () =
 
 	const test = {
 		"data": {
+			"2017-09-25": {
+				"buysPrice": 100,
+				"buysQuantity": 200,
+				"sellsPrice": 300,
+				"sellsQuantity": 400
+			},
 			"2017-10-25": {
 				"buysPrice": 100,
 				"buysQuantity": 200,
