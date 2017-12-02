@@ -82,9 +82,6 @@ export const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limi
 
 		// Get total requests and remove decimal
 		let totalRequests = ( totalItems / apiLimit ) | 0;
-		if ( Log.verboseMode ) {
-			totalRequests = 1;
-		}
 
 		const dataBundle = [];
 		let   page = 0;
