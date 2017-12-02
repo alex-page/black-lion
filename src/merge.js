@@ -2,7 +2,7 @@
  *
  * merge.js
  *
- * MergeCommerce - Merges items by day and commerce keys
+ * MergeCommerce - Merge items buy and sell data if it's on the same day
  *
  **************************************************************************************************************************************************************/
 
@@ -11,100 +11,118 @@
 
 
 /**
- * MergeCommerce - Merges items by day and commerce keys
+ * MergeCommerce - Merge items buy and sell data if it's on the same day
  * Based off https://codereview.stackexchange.com/questions/141530/calculate-average-of-array-of-objects-per-key-value-using-reduce
  *
- * @param {Object} data             - The data to be formatted
- * @param {String} data.id          - The item ID
- * @param {Object} data.buys        - The items buy data
- * @param {Object} data.sells       - The items sell data
- * @param {Object} data.whitelisted - Status of the item
- * @param {Object} now              - The current time
+ * @param {Object} data                                     - The data to merge
+ * @param {String} data.id                                  - The item ID
+ * @param {String} data.whitelisted                         - The items status
+ * @param {Object} data.rawdata                             - Unmerged data
+ * @param {Object} data.data                                - Previously merged data
+ * @param {String} data.rawdata[ timestamp ]                - The timestamp of when it was added to the DB
+ * @param {Object} data.rawdata[ timestamp ][ key ]         - The data we need to calculate an average for
+ * @param {Object} data.rawdata.whitelisted                 - Status of the item
+ * @param {String} data.data[ timestamp ]                   - The day the data was added
+ * @param {Object} data.data[ timestamp ][ key ]            - The data we need to calculate an average for
+ * @param {Object} now                                      - The current time
  *
- * @returns {Object}                - The newly formatted object
+ * @returns {Object}    - The merged data
  */
 export const MergeCommerce = ( data, now ) => {
-	// MergeDay - Merging item buy/sell data if it's on the same day
 
 	return new Promise( ( resolve, reject ) => {
 
-		if( typeof data !== 'object' || typeof now !== 'object' ) {
+		// Check that the data is somewhat valid
+		if( !data.rawdata && !data.data && typeof now !== 'object' ) {
 			reject( `Invalid data: MergeCommerce function (ID: ${ data.id } )` );
 		}
 
+		// --------------------------------------------------------------
+		// Reduce all of the new data ( data.rawdata ) into an array of values
+		// --------------------------------------------------------------
 		const yesterday = new Date( now.setDate( now.getDate() - 1 ) ); // Get yesterdays date
 
-		// Reduce for each key in the data.rawdata
-		const mergedData = Object.keys( data.rawdata ).reduce( ( previous, timestamp ) => {
+		const mergeObjects =  Object.keys( data.rawdata ).reduce( ( previous, timestamp ) => {
 
-			// If the items data is less then yesterday
+			// If the items timestamped data is older then yesterday
 			if ( new Date( timestamp ) < yesterday ) {
 
-				// Format the date for insertion into DB
-				const date = timestamp.slice( 0, 10 );}
+				// Format the date as we no longer need minutes
+				const date  = timestamp.slice( 0, 10 );
 
-				// If data has a date that conflicts with raw data
-				if ( data.data[ date ] ) {
+				// If the previous object doesn't have this date, add it
+				if( !( date in previous.data ) ) {
+					previous.data[ date ] = {};
+				};
 
-					// Go through any matching data keys
-					for ( let key in data.data[ date ] ) {
-
-						// Add the data to the thingo
-						previous.data[ date ][ key ] = {
-							total: data.data[ timestamp ][ key ],
-							iterations: 1,
-						};
-					}
-
-				}
-				// Data is fine, please leave it
-				else {
-					previous.data[ timestamp ] = data.data[ timestamp ];
-				}
-
-
-				// Add the day if it doesn't exist
-				if( !( date in previous.data ) ) { previous.data[ date ] = {};
-
-
-				// Go through the raw data keys and get the total and the number of iterations
+				// Move rawdata into an array inside previous.data[ date ][ key ]
 				for ( let key in data.rawdata[ timestamp ] ) {
 
-					// If the key already is in previous, add to it
+					// If there is existing data in previous.data[ date ]
 					if( key in previous.data[ date ] ) {
-						// Add the previous to the current, get the average, remove the decimal
-						previous.data[ date ][ key ].total += previous.data[ date ][ key ].total;
-						previous.data[ date ][ key ].iterations++;
+
+						// If there is an array of data
+						if ( previous.data[ date ][ key ].length ) {
+							previous.data[ date ][ key ][ previous.data[ date ][ key ].length ] = data.rawdata[ timestamp ][ key ];
+						}
+
+						// Found old data with the same date, lets add it to the array
+						else {
+							previous.data[ date ][ key ] = [ data.data[ date ][ key ], data.rawdata[ timestamp ][ key ] ];
+						}
 					}
 
-					// The key isn't in previous, create new instance
+					// Create a new instance as previous.data[ date ][ key ] doesn't exist
 					else {
-						previous.data[ date ][ key ] = {
-							total: data.rawdata[ timestamp ][ key ],
-							iterations: 1,
-						};
+						previous.data[ date ][ key ] = [ data.rawdata[ timestamp ][ key ] ];
 					}
 				}
 			}
+
+			// Keep the data in rawdata as it is still gathering data on the same day
 			else {
-				// Add the rawdata to previous as its fresh data
 				previous.rawdata[ timestamp ] = data.rawdata[ timestamp ];
 			}
 
-			// Return current iteration, then it runs again!
-			return previous;
+			return previous; // Return current iteration
 
 		},
 		// Set the initial value of previous for the reduce function
 		{
-			id: data.id,
-			data: {},
+			data: data.data,
 			rawdata: {},
 		});
 
-		// console.log( mergedData );
 
-		// Resolve the data
-		resolve( mergedData );
+		// --------------------------------------------------------------
+		// Calculate the average
+		// --------------------------------------------------------------
+		const averageData = {}; // Empty object for the average to be inserted
+
+		for ( let timestamp in mergeObjects.data ) {
+
+			// Create an empty object in
+			averageData[ timestamp ] = {};
+
+			for ( let key in mergeObjects.data[ timestamp ] ) {
+				// Calculate the average
+				if ( typeof mergeObjects.data[ timestamp ][ key ] === 'object' ) {
+					const count = mergeObjects.data[ timestamp ][ key ].length;                     // Total number of values
+					const sum = mergeObjects.data[ timestamp ][ key ].reduce( ( x, y ) => x + y );  // The sum of the values
+					averageData[ timestamp ][ key ] = Math.round( sum / count );
+				}
+				// Old data that can be left as is.
+				else {
+					averageData[ timestamp ][ key ] = mergeObjects.data[ timestamp ][ key ];
+				}
+			}
+		};
+
+		resolve({
+			id: data.id,
+			data: averageData,
+			rawdata: mergeObjects.rawdata,
+			whitelisted: data.whitelisted
+		});
 	})
 }
