@@ -1,6 +1,6 @@
 /***************************************************************************************************************************************************************
  *
- * db.js
+ * rethinkdb.js
  *
  * InsertDB      - Inserts data into the RethinkDB database
  * GetDB         - Merges data that has the same day timestamp
@@ -75,9 +75,10 @@ export const GetDB = ( dbOptions, table ) => {
 			RethinkDB
 				.table( table )
 				.run( connection )
-				.then( rethinkData => {
+				.then( rethinkData => rethinkData.toArray() )
+				.then( data => {
 					connection.close();
-					resolve( rethinkData.toArray() );
+					resolve( data );
 				})
 				.catch( error => reject( error ) )
 

@@ -15,7 +15,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { SETTINGS }                   from './settings';
 import { Log }                        from './helper';
-import { InsertDB }                   from './db';
+import { InsertDB }                   from './rethinkdb';
 import { GetTotalPages, GetBulkData } from './get';
 import { Bundle }                     from './bundle';
 import { TimestampCommerce }          from './timestamp';

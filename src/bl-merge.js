@@ -15,7 +15,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { SETTINGS }        from './settings';
 import { Log }             from './helper';
-import { GetDB, InsertDB } from './db';
+import { GetDB, InsertDB } from './rethinkdb';
 import { Bundle }          from './bundle';
 import { MergeCommerce }   from './merge';
 
@@ -36,7 +36,7 @@ const MergeData = () => {
 
 	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
 		.then(  data   => Bundle( data, MergeCommerce, now ) )
-		.then(  data   => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ), 'replace' )
+		.then(  data   => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'replace' ) )
 		.then(  ()     => Log.done( `Merge completed` ) )
 		.catch( error  => Log.error( `Merge failed: ${ error }` ) );
 };
