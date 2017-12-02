@@ -1,8 +1,8 @@
 /***************************************************************************************************************************************************************
  *
- * Init
+ * bl-merge.js
  *
- * Initialise -
+ * MergeData - Merge data that is on the same day
  *
  **************************************************************************************************************************************************************/
 
@@ -13,9 +13,11 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS }                   from './settings';
-import { Log }                        from './helper';
-import { GetTotalPages, GetBulkData } from './get';
+import { SETTINGS }        from './settings';
+import { Log }             from './helper';
+import { GetDB, InsertDB } from './rethinkdb';
+import { Bundle }          from './bundle';
+import { MergeCommerce }   from './merge';
 
 
 // Check if the user is in verbose mode
@@ -23,12 +25,20 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 	Log.verboseMode = true;
 }
 
-Log.welcome( `Starting the feast` );
 
-GetTotalPages( SETTINGS.get().api.commerce )
-	.then( totalPages => GetBulkData( SETTINGS.get().api.commerce, totalPages ) )
-	// then send data to db with timestamp
-	.then( data => Log.done( `The lions are full and go to sleep` ) )
-	.catch( error => Log.error( `The lions went hungry: ${ error }` ) );
+/**
+ * MergeData - Merge data that is on the same day
+ */
+const MergeData = () => {
+	Log.welcome( `Starting the merge` );
 
+	const now = new Date( Date.now() );
 
+	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
+		.then(  data   => Bundle( data, MergeCommerce, now ) )
+		.then(  data   => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'replace' ) )
+		.then(  ()     => Log.done( `Merge completed` ) )
+		.catch( error  => Log.error( `Merge failed: ${ error }` ) );
+};
+
+MergeData();

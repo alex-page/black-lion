@@ -40,13 +40,21 @@ export const SETTINGS = {
 			items: 'https://api.guildwars2.com/v2/items',
 			limit: 200,
 		},
+		db: {
+			db: 'blacklion',
+			host: 'localhost',
+			port: '28015',
+		},
+		table: {
+			commerce: 'commerce'
+		}
 	},
 
 
 	/**
 	 * Getting our settings
 	 *
-	 * @return {object} - The settings object
+	 * @returns {object} - The settings object
 	 */
 	get: () => {
 		return SETTINGS.defaults;
@@ -56,9 +64,9 @@ export const SETTINGS = {
 	/**
 	 * Merge with default settings
 	 *
-	 * @param  {object} newSettings - The new settings object to be merged
+	 * @param   {object} newSettings - The new settings object to be merged
 	 *
-	 * @return {object}               - Our new settings
+	 * @returns {object}             - Our new settings
 	 */
 	set: ( newSettings ) => {
 		Log.verbose(`Setting new settings`);

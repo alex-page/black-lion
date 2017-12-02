@@ -22,11 +22,11 @@ export const Style = {
 	/**
 	 * Parse ansi code while making sure we can nest colors
 	 *
-	 * @param  {string} text  - The text to be enclosed with an ansi escape string
-	 * @param  {string} start - The color start code, defaults to the standard color reset code 39m
-	 * @param  {string} end   - The color end code
+	 * @param   {string} text  - The text to be enclosed with an ansi escape string
+	 * @param   {string} start - The color start code, defaults to the standard color reset code 39m
+	 * @param   {string} end   - The color end code
 	 *
-	 * @return {string}       - The escaped text
+	 * @returns {string}       - The escaped text
 	 */
 	parse: ( text, start, end = `39m` ) => {
 		if( text !== undefined ) {
@@ -42,9 +42,9 @@ export const Style = {
 	/**
 	 * Style a string with ansi escape codes
 	 *
-	 * @param  {string} text - The string to be wrapped
+	 * @param   {string} text - The string to be wrapped
 	 *
-	 * @return {string}      - The string with opening and closing ansi escape color codes
+	 * @returns {string}      - The string with opening and closing ansi escape color codes
 	 */
 	black: text => Style.parse( text, `30m` ),
 	red: text => Style.parse( text, `31m` ),
@@ -68,6 +68,17 @@ export const Style = {
 export const Log = {
 	verboseMode: false, // verbose flag
 
+
+	/**
+	 * Log a message
+	 *
+	 * @param  {string}  text - The text you want to log
+	 */
+	message: ( text ) => {
+		console.log( `${ new Date().toJSON().slice( 0, 19 ) } : ${ text }`);
+	},
+
+
 	/**
 	 * Log a welcome message
 	 *
@@ -84,14 +95,6 @@ export const Log = {
 \n\n 🦁🦁🦁        ${ Style.bold(`${ text }`) }`);
 	},
 
-	/**
-	 * Log a message
-	 *
-	 * @param  {string}  text - The text you want to log
-	 */
-	message: ( text ) => {
-		console.log( `${ new Date().toString() } : ${ text }`);
-	},
 
 	/**
 	 * Log an error
@@ -102,6 +105,7 @@ export const Log = {
 		console.error(` 🦁 🦁        ${ Style.red(`ERROR:   ${ text }`) }`);
 	},
 
+
 	/**
 	 * Log some information
 	 *
@@ -110,6 +114,7 @@ export const Log = {
 	info: ( text ) => {
 		console.info(` 🔔 🦁        INFO:    ${ text }`);
 	},
+
 
 	/**
 	 * Log success
@@ -120,6 +125,7 @@ export const Log = {
 		console.info(` ✔ 🦁        ${ Style.green(`OK:      ${ text }`) }`);
 	},
 
+
 	/**
 	 * Log the final message
 	 *
@@ -128,6 +134,7 @@ export const Log = {
 	done: ( text ) => {
 		console.info(` 🚀 🦁        ${ Style.green( Style.bold( text ) ) }`);
 	},
+
 
 	/**
 	 * Log a verbose message
@@ -139,6 +146,7 @@ export const Log = {
 			console.info(` 🙊 🦁        ${ Style.gray(`VERBOSE: ${ text }`) }`);
 		}
 	},
+
 
 	/**
 	 * Add some space to the output
