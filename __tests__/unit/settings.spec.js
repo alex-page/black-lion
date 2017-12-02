@@ -25,7 +25,7 @@ test( 'Settings.get() - The default settings are correct', () => {
 		api: {
 			commerce: 'https://api.guildwars2.com/v2/commerce/prices',
 			items: 'https://api.guildwars2.com/v2/items',
-			limit: 5,
+			limit: 200,
 		},
 		db: {
 			db: 'blacklion',
@@ -50,7 +50,7 @@ test( 'Settings.set() - Not setting anything will merge default correctly', () =
 		api: {
 			commerce: 'https://api.guildwars2.com/v2/commerce/prices',
 			items: 'https://api.guildwars2.com/v2/items',
-			limit: 5,
+			limit: 200,
 		},
 		db: {
 			db: 'blacklion',
@@ -79,14 +79,14 @@ test( 'Settings.set() - Set settings correctly', () => {
 	const newSettings = SETTINGS.get();
 
 	newSettings.api.test = 'test';
-	newSettings.api.limit = 200;
+	newSettings.api.limit = 1;
 	newSettings.table.commerce = 'test';
 
 	const settings = {
 		api: {
 			commerce: 'https://api.guildwars2.com/v2/commerce/prices',
 			items: 'https://api.guildwars2.com/v2/items',
-			limit: 200,
+			limit: 1,
 			test: 'test'
 		},
 		db: {
