@@ -19,31 +19,12 @@ import { MergeCommerce } from '../../src/merge';
 // ----------------------------------------------------------------
 // MergeCommerce
 // ----------------------------------------------------------------
-test( 'MergeCommerce: past dates should get merged into data from rawdata', () => {
+test( 'MergeCommerce: rawdata gets added to data', () => {
 
 	const now = new Date( '2017-11-30T09:40' );
 
 	const test = {
-		"data": {
-			"2017-09-25": {
-				"buysPrice": 100,
-				"buysQuantity": 200,
-				"sellsPrice": 300,
-				"sellsQuantity": 400
-			},
-			"2017-10-25": {
-				"buysPrice": 100,
-				"buysQuantity": 200,
-				"sellsPrice": 300,
-				"sellsQuantity": 400
-			},
-			"2017-11-25": {
-				"buysPrice": 100,
-				"buysQuantity": 200,
-				"sellsPrice": 300,
-				"sellsQuantity": 400
-			}
-		},
+		"data": {},
 		"id": 1,
 		"rawdata": {
 			"2017-10-25T09:40": {
@@ -52,24 +33,6 @@ test( 'MergeCommerce: past dates should get merged into data from rawdata', () =
 				"sellsPrice": 3,
 				"sellsQuantity": 4
 			},
-			"2017-10-25T09:45": {
-				"buysPrice": 4,
-				"buysQuantity": 3,
-				"sellsPrice": 2,
-				"sellsQuantity": 1
-			},
-			"2017-11-25T09:43": {
-				"buysPrice": 5,
-				"buysQuantity": 6,
-				"sellsPrice": 7,
-				"sellsQuantity": 8
-			},
-			"2017-11-25T09:46": {
-				"buysPrice": 9,
-				"buysQuantity": 10,
-				"sellsPrice": 11,
-				"sellsQuantity": 12
-			},
 		},
 		"whitelisted": false
 	};
@@ -77,94 +40,83 @@ test( 'MergeCommerce: past dates should get merged into data from rawdata', () =
 	const result = {
 		"id": 1,
 		"data": {
-			"2017-09-25": {
-				"buysPrice": 100,
-				"buysQuantity": 200,
-				"sellsPrice": 300,
-				"sellsQuantity": 400
-			},
 			"2017-10-25": {
-				"buysPrice": 35,
-				"buysQuantity": 68,
-				"sellsPrice": 102,
-				"sellsQuantity": 135,
-			},
-			"2017-11-25": {
-				"buysPrice": 38,
-				"buysQuantity": 72,
-				"sellsPrice": 106,
-				"sellsQuantity": 140,
-			},
+				"buysPrice": 1,
+				"buysQuantity": 2,
+				"sellsPrice": 3,
+				"sellsQuantity": 4
+			}
 		},
 		"whitelisted": false,
 		"rawdata": {}
 	};
 
 	MergeCommerce( test, now )
-		.then( data => expect( data ).toEqual( result ) )
-		.catch( error => console.error( error ) );
+		.then( data => expect( data ).toEqual( result ) );
+
 });
 
 
-test( 'MergeCommerce: merge data should not merge todays data', () => {
+test( 'MergeCommerce: rawdata gets merged with data if it is on the same date', () => {
 
-	// Date.now for jest to mock 2015-11-20T09:40
-	const now = new Date( '2015-11-20T09:40' );
+	const now = new Date( '2017-11-30T09:40' );
 
 	const test = {
 		"data": {
-			"2015-11-10": {
-				"buysPrice": 1,
-				"buysQuantity": 2,
-				"sellsPrice": 3,
-				"sellsQuantity": 4
+			"2017-10-25": {
+				"buysPrice": 10,
+				"buysQuantity": 20,
+				"sellsPrice": 30,
+				"sellsQuantity": 40
 			},
-			"2015-11-15": {
-				"buysPrice": 100,
-				"buysQuantity": 101,
-				"sellsPrice": 102,
-				"sellsQuantity": 103
-			}
 		},
 		"id": 2,
 		"rawdata": {
-			"2015-01-15T09:40": {
+			"2017-10-25T09:40": {
 				"buysPrice": 1,
 				"buysQuantity": 2,
 				"sellsPrice": 3,
 				"sellsQuantity": 4
 			},
-			"2015-11-15T09:40": {
-				"buysPrice": 1,
-				"buysQuantity": 2,
-				"sellsPrice": 3,
-				"sellsQuantity": 4
-			},
-			"2015-11-15T09:43": {
-				"buysPrice": 5,
-				"buysQuantity": 6,
-				"sellsPrice": 7,
-				"sellsQuantity": 8
-			},
-			"2015-11-15T09:49": {
-				"buysPrice": 9,
-				"buysQuantity": 10,
-				"sellsPrice": 11,
-				"sellsQuantity": 12
-			},
-			"2015-11-15T09:51": {
-				"buysPrice": 13,
-				"buysQuantity": 14,
-				"sellsPrice": 15,
-				"sellsQuantity": 16
-			},
+		},
+		"whitelisted": false
+	};
+
+	const result = {
+		"id": 2,
+		"data": {
+			"2017-10-25": {
+				"buysPrice": 6,
+				"buysQuantity": 11,
+				"sellsPrice": 17,
+				"sellsQuantity": 22
+			}
+		},
+		"whitelisted": false,
+		"rawdata": {}
+	};
+
+	MergeCommerce( test, now )
+		.then( data => expect( data ).toEqual( result ) );
+
+});
+
+
+test( 'MergeCommerce: merge data should not merge today or yesterdays data', () => {
+
+	const now = new Date( '2015-11-20T09:40' );
+
+	const test = {
+		"data": {},
+		"id": 3,
+		"rawdata": {
 			"2015-11-19T09:40": {
 				"buysPrice": 13,
 				"buysQuantity": 14,
 				"sellsPrice": 15,
 				"sellsQuantity": 16
 			},
-			"2015-11-20T09:40": {
+			"2015-11-20T09:45": {
 				"buysPrice": 9,
 				"buysQuantity": 10,
 				"sellsPrice": 11,
@@ -175,27 +127,8 @@ test( 'MergeCommerce: merge data should not merge todays data', () => {
 	};
 
 	const result = {
-		"id": 2,
-		"data": {
-			"2015-01-15": {
-				"buysPrice": 1,
-				"buysQuantity": 2,
-				"sellsPrice": 3,
-				"sellsQuantity": 4
-			},
-			"2015-11-10": {
-				"buysPrice": 1,
-				"buysQuantity": 2,
-				"sellsPrice": 3,
-				"sellsQuantity": 4
-			},
-			"2015-11-15": {
-				"buysPrice": 26,
-				"buysQuantity": 27,
-				"sellsPrice": 28,
-				"sellsQuantity": 29,
-			}
-		},
+		"id": 3,
+		"data": {},
 		"rawdata": {
 			"2015-11-19T09:40": {
 				"buysPrice": 13,
@@ -203,13 +136,83 @@ test( 'MergeCommerce: merge data should not merge todays data', () => {
 				"sellsPrice": 15,
 				"sellsQuantity": 16
 			},
-			"2015-11-20T09:40": {
+			"2015-11-20T09:45": {
 				"buysPrice": 9,
 				"buysQuantity": 10,
 				"sellsPrice": 11,
 				"sellsQuantity": 12
 			}
 		},
+		"whitelisted": false
+	};
+
+	MergeCommerce( test, now )
+		.then( data => expect( data ).toEqual( result ) )
+		.catch( error => console.error( error ) );
+
+});
+
+
+test( 'MergeCommerce: Old data should get merged with new data', () => {
+
+	const now = new Date( '2015-11-20T09:40' );
+
+	const test = {
+		"data": {
+			"2015-10-10": {
+				"buysPrice": 13,
+				"buysQuantity": 14,
+				"sellsPrice": 15,
+				"sellsQuantity": 16
+			},
+			"2015-11-10": {
+				"buysPrice": 13,
+				"buysQuantity": 14,
+				"sellsPrice": 15,
+				"sellsQuantity": 16
+			}
+		},
+		"id": 4,
+		"rawdata": {
+			"2015-11-10T09:40": {
+				"buysPrice": 13,
+				"buysQuantity": 14,
+				"sellsPrice": 15,
+				"sellsQuantity": 16
+			},
+			"2015-11-10T09:45": {
+				"buysPrice": 9,
+				"buysQuantity": 10,
+				"sellsPrice": 11,
+				"sellsQuantity": 12
+			},
+			"2015-11-10T09:50": {
+				"buysPrice": 13,
+				"buysQuantity": 14,
+				"sellsPrice": 15,
+				"sellsQuantity": 16
+			}
+		},
+		"whitelisted": false
+	};
+
+	const result = {
+		"id": 4,
+		"data": {
+			"2015-10-10": {
+				"buysPrice": 13,
+				"buysQuantity": 14,
+				"sellsPrice": 15,
+				"sellsQuantity": 16
+			},
+			"2015-11-10": {
+				"buysPrice": 12,
+				"buysQuantity": 13,
+				"sellsPrice": 14,
+				"sellsQuantity": 15
+			}
+		},
+		"rawdata": {},
 		"whitelisted": false
 	};
 
