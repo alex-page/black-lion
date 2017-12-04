@@ -21,17 +21,11 @@ import { Bundle }                     from './bundle';
 import { TimestampCommerce }          from './timestamp';
 
 
-// Check if the user is in verbose mode
-if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
-	Log.verboseMode = true;
-}
-
-
 /**
  * GetCommerceData - Gets the commerce data from the API
  */
-const GetData = () => {
-	Log.welcome( `Getting data from: ${ SETTINGS.get().api.commerce } ` );
+export const GetData = () => {
+	Log.message( `GetData()   Started`);
 
 	// Time to minute when the file was ran
 	const now = ( new Date() ).toJSON().slice( 0, 16 );
@@ -40,8 +34,6 @@ const GetData = () => {
 		.then(  totalPages      => GetBulkData( SETTINGS.get().api.commerce, totalPages ) )
 		.then(  unformattedData => Bundle( unformattedData, TimestampCommerce, now ) )
 		.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
-		.then(  results         => Log.done( `The lions are full and go to sleep` ) )
-		.catch( error           => Log.error( `The lions went hungry: ${ error }` ) );
+		.then(  results         => Log.message( `GetData()   ${ results } ` ) )
+		.catch( error           => Log.error( error ) );
 };
-
-GetData();

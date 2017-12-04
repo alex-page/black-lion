@@ -13,32 +13,25 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS }        from './settings';
-import { Log }             from './helper';
-import { GetDB, InsertDB } from './rethinkdb';
-import { Bundle }          from './bundle';
-import { MergeCommerce }   from './merge';
-
-
-// Check if the user is in verbose mode
-if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
-	Log.verboseMode = true;
-}
+import { SETTINGS }                    from './settings';
+import { Log }                         from './helper';
+import { GetDB, InsertBatchDB }        from './rethinkdb';
+import { Bundle }                      from './bundle';
+import { MergeCommerce, MergeResults } from './merge';
 
 
 /**
  * MergeData - Merge data that is on the same day
  */
-const MergeData = () => {
-	Log.welcome( `Starting the merge` );
+export const MergeData = () => {
+	Log.message( `MergeData() Started` );
 
 	const now = new Date( Date.now() );
 
 	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
-		.then(  data   => Bundle( data, MergeCommerce, now ) )
-		.then(  data   => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'replace' ) )
-		.then(  ()     => Log.done( `Merge completed` ) )
-		.catch( error  => Log.error( `Merge failed: ${ error }` ) );
+		.then(  data         => Bundle( data, MergeCommerce, now ) )
+		.then(  data         => InsertBatchDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'replace', 50 ) )
+		.then(  batchResults => MergeResults( batchResults ) )
+		.then(  results      => Log.message( `MergeData() ${ results }` ) )
+		.catch( error        => Log.error( `MergeData() {Failed}: ${ error }` ) );
 };
-
-MergeData();

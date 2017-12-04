@@ -75,7 +75,7 @@ export const Log = {
 	 * @param  {string}  text - The text you want to log
 	 */
 	message: ( text ) => {
-		console.log( `${ new Date().toJSON().slice( 0, 19 ) } : ${ text }`);
+		console.log( `${ Style.bold( new Date().toJSON().slice( 0, 19 ) ) } | ${ Style.green( text ) }`);
 	},
 
 

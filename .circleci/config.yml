@@ -29,7 +29,7 @@ workflows:
             branches:
               only: develop # and only in the `develop` branch
 
-      - test:        # run test
+      - test:               # run test
           filters:
             branches:
               only: master  # and only in the `master` branch

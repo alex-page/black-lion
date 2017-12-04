@@ -10,6 +10,12 @@
 'use strict';
 
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { Log }        from './helper';
+
+
 /**
  * MergeCommerce - Merge items buy and sell data if it's on the same day
  * Based off https://codereview.stackexchange.com/questions/141530/calculate-average-of-array-of-objects-per-key-value-using-reduce
@@ -124,5 +130,27 @@ export const MergeCommerce = ( data, now ) => {
 			rawdata: mergeObjects.rawdata,
 			whitelisted: data.whitelisted
 		});
+	})
+}
+
+
+/**
+ * MergeResults - Merges the rethinkDB responses from batch operations
+ *
+ * @param   {Object} results             - Object returned by rethinkDB
+ *
+ * @returns {Promise}
+ */
+export const MergeResults = ( results ) => {
+	Log.verbose( `Merging results` );
+
+	return new Promise( ( resolve, reject ) => {
+
+		Object.keys( results ).reduce( ( result, previous ) => {
+			console.log( result );
+			console.log( previous );
+		}, {});
+
+		resolve();
 	})
 }
