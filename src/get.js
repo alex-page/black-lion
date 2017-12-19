@@ -15,14 +15,14 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Got         from 'got';
+const Got = require( 'got' );
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log }      from './helper';
-import { SETTINGS } from './settings';
+const Log      = require( './helper' ).Log;
+const SETTINGS = require( './settings' );
 
 
 /**
@@ -33,7 +33,7 @@ import { SETTINGS } from './settings';
  *
  * @returns {Promise}           - The data body
  */
-export const GetData = ( url, option ) => {
+const GetData = ( url, option ) => {
 	Log.verbose( `GetData       - Getting page #${ option.query.page + 1 } from: ${ url }.` );
 	return new Promise( ( resolve, reject ) => {
 		Got( url, option )
@@ -50,7 +50,7 @@ export const GetData = ( url, option ) => {
  *
  * @returns {Promise}    - The total number of data items
  */
-export const GetTotalPages = ( url ) => {
+const GetTotalPages = ( url ) => {
 	Log.verbose( `GetTotalPages - Getting total pages from x-result-total.` );
 	return new Promise( ( resolve, reject ) => {
 		Got( url, {
@@ -75,7 +75,7 @@ export const GetTotalPages = ( url ) => {
  *
  * @returns {Promise}           - The data from all of the requests
  */
-export const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limit ) => {
+const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limit ) => {
 	Log.verbose( `GetBulkData   - Getting ${ totalItems } items` );
 
 	return new Promise( ( resolve, reject ) => {
@@ -109,3 +109,9 @@ export const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limi
 	})
 }
 
+
+module.exports = {
+	GetData: GetData,
+	GetBulkData: GetBulkData,
+	GetTotalPages: GetTotalPages,
+};

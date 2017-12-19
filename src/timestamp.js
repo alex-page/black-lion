@@ -22,7 +22,7 @@
  *
  * @returns {Object}                - The newly formatted object
  */
-export const TimestampCommerce = ( data, now ) => {
+const TimestampCommerce = ( data, now ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -45,3 +45,6 @@ export const TimestampCommerce = ( data, now ) => {
 
 	})
 }
+
+
+module.exports = TimestampCommerce;

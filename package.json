@@ -18,10 +18,10 @@
 		"test": "jest",
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
-		"start": "npm run build && node dist/init.js",
-		"start:verbose": "npm run build && node --inspect dist/init.js --verbose",
-		"merge": "npm run build && node dist/bl-merge.js",
-		"build": "babel src --out-dir dist --presets=env --sourcemaps",
+		"start": "node src/init.js",
+		"start:verbose": "node --inspect src/init.js --verbose",
+		"merge": "node src/bl-merge.js",
+		"commerce": "node src/bl-commerce.js",
 		"watch": "nodemon --watch src --exec npm run start",
 		"watch:verbose": "nodemon --watch src --exec npm run commerce:verbose"
 	},
@@ -39,8 +39,6 @@
 	"homepage": "https://github.com/alex-page/black-lion#readme",
 	"dependencies": {
 		"async": "^2.6.0",
-		"babel-cli": "^6.26.0",
-		"babel-preset-env": "^1.6.1",
 		"got": "^8.0.0",
 		"node-schedule": "^1.2.5",
 		"rethinkdb": "^2.3.3"

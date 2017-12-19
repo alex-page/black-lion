@@ -13,21 +13,22 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Schedule         from 'node-schedule';
+const Schedule = require( 'node-schedule' );
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log }          from './helper';
-import { GetData }      from './bl-commerce';
-import { MergeData }    from './bl-merge';
+const Log       = require( './helper' ).Log;
+const GetData   = require( './bl-commerce' );
+const MergeData = require( './bl-merge' );
 
 
 // Check if the user is in verbose mode
 if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 	Log.verboseMode = true;
 };
+
 
 // Log the welcome message then run the scheduled jobs
 Promise.resolve( Log.welcome( 'Starting up black lion' ) )

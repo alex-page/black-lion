@@ -13,18 +13,19 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS }                   from './settings';
-import { Log }                        from './helper';
-import { InsertDB }                   from './rethinkdb';
-import { GetTotalPages, GetBulkData } from './get';
-import { Bundle }                     from './bundle';
-import { TimestampCommerce }          from './timestamp';
+const SETTINGS          = require( './settings' );
+const Log               = require( './helper' ).Log;
+const InsertDB          = require( './rethinkdb' ).InsertDB;
+const GetTotalPages     = require( './get' ).GetTotalPages;
+const GetBulkData       = require( './get' ).GetBulkData;
+const Bundle            = require( './bundle' );
+const TimestampCommerce = require( './timestamp' );
 
 
 /**
  * GetCommerceData - Gets the commerce data from the API
  */
-export const GetData = () => {
+const GetData = () => {
 	Log.message( `GetData()   Started`);
 
 	// Time to minute when the file was ran
@@ -37,3 +38,5 @@ export const GetData = () => {
 		.then(  results         => Log.message( `GetData()   ${ results } ` ) )
 		.catch( error           => Log.error( error ) );
 };
+
+module.exports = GetData;

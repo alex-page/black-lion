@@ -13,25 +13,26 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS }                    from './settings';
-import { Log }                         from './helper';
-import { GetDB, InsertBatchDB }        from './rethinkdb';
-import { Bundle }                      from './bundle';
-import { MergeCommerce, MergeResults } from './merge';
+const SETTINGS      = require( './settings' );
+const Log           = require( './helper' ).Log;
+const GetDB         = require( './rethinkdb' ).GetDB;
+const InsertBatchDB = require( './rethinkdb' ).InsertBatchDB;
+const Bundle        = require( './bundle' );
+const MergeCommerce = require( './merge' );
 
 
 /**
  * MergeData - Merge data that is on the same day
  */
-export const MergeData = () => {
+const MergeData = () => {
 	Log.message( `MergeData() Started` );
 
 	const now = new Date( Date.now() );
 
 	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
 		.then(  data         => Bundle( data, MergeCommerce, now ) )
-		.then(  data         => InsertBatchDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce, 'replace', 50 ) )
-		.then(  batchResults => MergeResults( batchResults ) )
 		.then(  results      => Log.message( `MergeData() ${ results }` ) )
 		.catch( error        => Log.error( `MergeData() {Failed}: ${ error }` ) );
 };
+
+module.exports = MergeData;

@@ -13,7 +13,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log }        from './helper';
+const Log       = require( './helper' ).Log;
 
 
 /**
@@ -34,7 +34,7 @@ import { Log }        from './helper';
  *
  * @returns {Object}    - The merged data
  */
-export const MergeCommerce = ( data, now ) => {
+const MergeCommerce = ( data, now ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -134,23 +134,4 @@ export const MergeCommerce = ( data, now ) => {
 }
 
 
-/**
- * MergeResults - Merges the rethinkDB responses from batch operations
- *
- * @param   {Object} results             - Object returned by rethinkDB
- *
- * @returns {Promise}
- */
-export const MergeResults = ( results ) => {
-	Log.verbose( `Merging results` );
-
-	return new Promise( ( resolve, reject ) => {
-
-		Object.keys( results ).reduce( ( result, previous ) => {
-			console.log( result );
-			console.log( previous );
-		}, {});
-
-		resolve();
-	})
-}
+module.exports = MergeCommerce;

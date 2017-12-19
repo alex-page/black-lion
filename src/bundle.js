@@ -13,7 +13,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log } from './helper';
+const Log = require( './helper' ).Log;
 
 
 /**
@@ -25,7 +25,7 @@ import { Log } from './helper';
  *
  * @returns {Promise}
  */
-export const Bundle = ( data, FormatPattern, now ) => {
+const Bundle = ( data, FormatPattern, now ) => {
 	Log.verbose( `AsyncMap      - Changing the data asynchonously` );
 
 	return new Promise( ( resolve, reject ) => {
@@ -43,4 +43,4 @@ export const Bundle = ( data, FormatPattern, now ) => {
 }
 
 
-
+module.exports = Bundle;
