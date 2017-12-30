@@ -31,6 +31,7 @@ const MergeData = () => {
 
 	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
 		.then(  data         => Bundle( data, MergeCommerce, now ) )
+		.then(  mergedData   => console.log( mergedData ) )
 		.then(  results      => Log.message( `MergeData() ${ results }` ) )
 		.catch( error        => Log.error( `MergeData() {Failed}: ${ error }` ) );
 };
