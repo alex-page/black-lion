@@ -35,7 +35,7 @@ const GetData = () => {
 		.then(  totalPages      => GetBulkData( SETTINGS.get().api.commerce, totalPages ) )
 		.then(  unformattedData => Bundle( unformattedData, TimestampCommerce, now ) )
 		.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
-		.then(  results         => Log.message( `GetData()   ${ results } ` ) )
+		.then(  results         => Log.message( `GetData()   Finished - [ ${ results }]` ) )
 		.catch( error           => Log.error( error ) );
 };
 
