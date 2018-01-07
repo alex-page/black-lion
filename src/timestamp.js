@@ -33,6 +33,7 @@ const TimestampCommerce = ( data, now ) => {
 		resolve({
 			id: data.id,
 			whitelisted: data.whitelisted,
+			data: {},
 			rawdata: {
 				[ now ]: {
 					buysQuantity  : data.buys.quantity,

@@ -37,6 +37,7 @@ test( 'TimestampCommerce: should format and add the timestamp', () => {
 	};
 
 	const result = {
+		"data": {},
 		"id": 24,
 		"whitelisted": false,
 		"rawdata": {
