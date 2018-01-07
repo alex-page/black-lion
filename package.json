@@ -16,6 +16,7 @@
 	],
 	"scripts": {
 		"test": "jest",
+		"test:integration": "node __tests__/integration/test",
 		"test:detail": "jest --coverage",
 		"test:watch": "jest --watch --coverage",
 		"start": "node src/init.js",

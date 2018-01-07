@@ -16,7 +16,6 @@
 const SETTINGS      = require( './settings' );
 const Log           = require( './helper' ).Log;
 const GetDB         = require( './rethinkdb' ).GetDB;
-const InsertBatchDB = require( './rethinkdb' ).InsertBatchDB;
 const Bundle        = require( './bundle' );
 const MergeCommerce = require( './merge' );
 
