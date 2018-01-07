@@ -36,7 +36,7 @@ const GetData = () => {
 		.then(  unformattedData => Bundle( unformattedData, TimestampCommerce, now ) )
 		.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
 		.then(  results         => Log.message( `GetData()   Finished - [ ${ results }]` ) )
-		.catch( error           => Log.error( error ) );
+		.catch( error           => Log.error( `GetData()   Failed   - ${ error }` ) );
 };
 
 module.exports = GetData;

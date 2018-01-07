@@ -34,13 +34,12 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 Promise.resolve( Log.welcome( 'Starting up black lion' ) )
 	.then( () => {
 
-		// Run the functions on start
-		GetData();
+		MergeData();
 
 		// Every two minutes get the commerce data
-	 	Schedule.scheduleJob('*/2 * * * *', () => {
-			GetData();
-		});
+	 	// Schedule.scheduleJob('*/2 * * * *', () => {
+		// 	GetData();
+		// });
 
 		// // Every two days merge the data
 		// Schedule.scheduleJob('0 0 */2 * *', () => {
