@@ -46,7 +46,10 @@ const InsertDB = ( data, dbOptions, table, conflict = 'update' ) => {
 					.insert( data, { conflict: conflict } )
 					.run( connection )
 					.then( HandleResults )
-					.then( () => connection.close() )
+					.then( data => {
+						connection.close();
+						resolve( data );
+					})
 					.catch( error => reject( error ) )
 
 			})
@@ -109,7 +112,7 @@ const HandleResults = ( results ) => {
 	// Close the connection and send back the results
 	else {
 		Object.keys( results ).map( result => {
-			message += result;
+			message += `${ result } ${ results[ result ] }; `;
 		});
 
 		return message;

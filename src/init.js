@@ -34,8 +34,9 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 Promise.resolve( Log.welcome( 'Starting up black lion' ) )
 	.then( () => {
 
-		// GetData();
+		// For testing can be removed later for cron jobs below
 		MergeData();
+		// GetData();
 
 		// Every two minutes get the commerce data
 	 	// Schedule.scheduleJob('*/2 * * * *', () => {

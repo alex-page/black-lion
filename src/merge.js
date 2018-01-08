@@ -95,7 +95,7 @@ const MergeCommerce = ( data, now ) => {
 		},
 		// Set the initial value of previous for the reduce function
 		{
-			data: data.data,
+			data: data.data || {},
 			rawdata: {},
 		});
 

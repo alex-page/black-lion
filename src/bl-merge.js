@@ -16,7 +16,6 @@
 const SETTINGS      = require( './settings' );
 const Log           = require( './helper' ).Log;
 const GetDB         = require( './rethinkdb' ).GetDB;
-const InsertBatchDB = require( './rethinkdb' ).InsertBatchDB;
 const Bundle        = require( './bundle' );
 const MergeCommerce = require( './merge' );
 
@@ -31,8 +30,9 @@ const MergeData = () => {
 
 	GetDB( SETTINGS.get().db, SETTINGS.get().table.commerce )
 		.then(  data         => Bundle( data, MergeCommerce, now ) )
-		.then(  results      => Log.message( `MergeData() ${ results }` ) )
-		.catch( error        => Log.error( `MergeData() {Failed}: ${ error }` ) );
+		.then(  mergedData   => console.log( mergedData ) )
+		.then(  results      => Log.message( `MergeData() Finished - [ ${ results }]` ) )
+		.catch( error        => Log.error( `MergeData() Failed   - ${ error }` ) );
 };
 
 module.exports = MergeData;
