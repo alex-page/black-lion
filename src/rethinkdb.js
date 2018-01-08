@@ -3,7 +3,7 @@
  * rethinkdb.js
  *
  * InsertDB      - Inserts data into the RethinkDB database
- * GetDB         - Merges data that has the same day timestamp
+ * GetDB         - Gets data from the DB
  * HandleResults - Handles the rethinkDB response
  *
  **************************************************************************************************************************************************************/
@@ -15,13 +15,13 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import RethinkDB from 'rethinkdb';
+const  RethinkDB  = require( 'rethinkdb' );
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log }   from './helper';
+const Log       = require( './helper' ).Log;
 
 
 /**
@@ -32,7 +32,7 @@ import { Log }   from './helper';
  *
  * @returns {Promise}
  */
-export const InsertDB = ( data, dbOptions, table, conflict = 'update' ) => {
+const InsertDB = ( data, dbOptions, table, conflict = 'update' ) => {
 	Log.verbose( `InsertDB      @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
 	return new Promise( ( resolve, reject ) => {
@@ -56,15 +56,14 @@ export const InsertDB = ( data, dbOptions, table, conflict = 'update' ) => {
 
 
 /**
- * GetDB - Merges data that has the same day timestamp
+ * GetDB - Gets data from the datbase
  * @param  {Object} dbOptions - Information to connect to the db
  * @param  {String} table     - The table for the data to go into
- * @param  {Number} time      - Current epoch time
  *
  * @return {Promise}
  */
-export const GetDB = ( dbOptions, table ) => {
-	Log.verbose( `GetDB         @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
+const GetDB = ( dbOptions, table ) => {
+	Log.verbose( `GetDB         - DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -95,24 +94,30 @@ export const GetDB = ( dbOptions, table ) => {
  * @param   {Number} results.error       - Number of errors found
  * @param   {String} results.first_error - The first error found
  *
- * @returns {Promise}hy 90
+ * @returns {Promise}
  */
 const HandleResults = ( results ) => {
 	Log.verbose( `Handling results` );
 
-	return new Promise( ( resolve, reject ) => {
+	let message = "";
 
-		// Check that there were no errors inserting the data
-		if ( results.errors !== 0 ) {
-			reject( `There was ${ results.errors } errors:\n\n${ results.first_error }` )
-		}
+	// Check that there were no errors inserting the data
+	if ( results.errors !== 0 ) {
+		reject( `There was ${ results.errors } errors:\n\n${ results.first_error }` )
+	}
 
-		// Close the connection and send back the results
-		else {
-			Object.keys( results ).map( result => {
-				Log.verbose( `${ result }: ${ results[result] }`)
-			});
-			resolve();
-		}
-	})
+	// Close the connection and send back the results
+	else {
+		Object.keys( results ).map( result => {
+			message += result;
+		});
+
+		return message;
+	}
+}
+
+
+module.exports = {
+	GetDB: GetDB,
+	InsertDB: InsertDB,
 }

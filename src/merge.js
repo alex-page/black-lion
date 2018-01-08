@@ -10,6 +10,12 @@
 'use strict';
 
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+const Log       = require( './helper' ).Log;
+
+
 /**
  * MergeCommerce - Merge items buy and sell data if it's on the same day
  * Based off https://codereview.stackexchange.com/questions/141530/calculate-average-of-array-of-objects-per-key-value-using-reduce
@@ -28,7 +34,7 @@
  *
  * @returns {Object}    - The merged data
  */
-export const MergeCommerce = ( data, now ) => {
+const MergeCommerce = ( data, now ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -126,3 +132,6 @@ export const MergeCommerce = ( data, now ) => {
 		});
 	})
 }
+
+
+module.exports = MergeCommerce;
