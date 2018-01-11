@@ -2,7 +2,7 @@
  *
  * TESTER
  *
- * Running end to end tests
+ * Running integration tests
  *
  **************************************************************************************************************************************************************/
 
@@ -12,13 +12,13 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // DEPENDENCIES
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const InsertDB          = require( '../../src/rethinkdb' ).InsertDB;
+const InsertBulkDB      = require( '../../src/rethinkdb' ).InsertBulkDB;
 const SETTINGS          = require( '../../src/settings' );
 
 
 const data              = require( './commerce.json' );
 
 
-InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce )
+InsertBulkDB( data, SETTINGS.get().api.limit, SETTINGS.get().db, SETTINGS.get().table.commerce )
 	.then(  ()    => console.log( 'jobs done' ))
 	.catch( error => console.error( error ) );
