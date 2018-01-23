@@ -38,8 +38,14 @@ const SETTINGS = {
 			host: 'localhost',
 			port: '28015',
 		},
+		testdb: {
+			db: 'test',
+			host: 'localhost',
+			port: '28015',
+		},
 		table: {
-			commerce: 'commerce'
+			commerce: 'commerce',
+			integration: 'integration'
 		}
 	},
 
