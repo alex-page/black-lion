@@ -48,16 +48,11 @@ const Test = () => {
 	// Insert the fixtured test data
 	InsertBulkDB( originalData, SETTINGS.get().api.limit, testDB, testTable, 'replace' )
 		.then( () => {
-			console.log( '1' );
-			MergeData( testDB, testTable, testDate );
-		})
-		.then( () => {
-			console.log( '2' );
-			GetDB( testDB, testTable );
-		})
-		.then( testResults => {
-			console.log( '3' );
-			console.log( testResults.length );
+			MergeData( testDB, testTable, testDate )
+				.then( () => GetDB( testDB, testTable ) )
+				.then( testResults => {
+					console.log( testResults.length );
+				})
 		})
 		.catch( error => Log.error( error ) )
 };
