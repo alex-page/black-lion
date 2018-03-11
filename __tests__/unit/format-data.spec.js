@@ -1,11 +1,11 @@
 /***************************************************************************************************************************************************************
  *
- * bundle.js unit tests
+ * format-data.js unit tests
  *
- * @file src/bundle.js
+ * @file src/format-data.js
  *
  * Tested methods:
- * - Bundle
+ * - FormatData
  *
  **************************************************************************************************************************************************************/
 
@@ -13,13 +13,13 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Bundle = require( '../../src/bundle' );
+const FormatData = require( '../../src/format-data' );
 
 
 // ----------------------------------------------------------------
-// Bundle
+// FormatData
 // ----------------------------------------------------------------
-test( 'Bundle: should take a function and data and run it asynchronously', () => {
+test( 'FormatData: should take a function and data and run it asynchronously', () => {
 
 	const test = [{ "a": 24, "b": 15 }, { "a": 12, "b": 99 }, { "a": 1, "b": 1 } ];
 
@@ -29,13 +29,13 @@ test( 'Bundle: should take a function and data and run it asynchronously', () =>
 		return item.a + item.b;
 	};
 
-	Bundle( test, TestFunction )
+	FormatData( test, TestFunction )
 		.then( data => expect( data.sort() ).toEqual( result ) )
 
 });
 
 
-test( 'Bundle: should throw an error if the result of the function is not truthy', () => {
+test( 'FormatData: should throw an error if the result of the function is not truthy', () => {
 
 	const test = [{ "a": 24, "b": 15 } ];
 
@@ -45,7 +45,7 @@ test( 'Bundle: should throw an error if the result of the function is not truthy
 		})
 	};
 
-	Bundle( test, TestFunction )
+	FormatData( test, TestFunction )
 		.catch( error => expect( error ).toEqual( 'Nope!' ) );
 
 });

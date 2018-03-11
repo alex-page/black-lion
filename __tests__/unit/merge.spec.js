@@ -2,7 +2,7 @@
  *
  * merge.js unit tests
  *
- * @file src/async.js
+ * @file src/merge.js
  *
  * Tested methods:
  * - MergeCommerce

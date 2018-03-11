@@ -2,7 +2,7 @@
  *
  * timestamp.js unit tests
  *
- * @file src/async.js
+ * @file src/timestamp.js
  *
  * Tested methods:
  * - TimestampCommerce

@@ -18,7 +18,7 @@ const Log               = require( './helper' ).Log;
 const InsertDB          = require( './rethinkdb' ).InsertDB;
 const GetTotalPages     = require( './get' ).GetTotalPages;
 const GetBulkData       = require( './get' ).GetBulkData;
-const Bundle            = require( './bundle' );
+const FormatData        = require( './format-data' );
 const TimestampCommerce = require( './timestamp' );
 
 
@@ -36,7 +36,7 @@ const GetData = (
 	return new Promise( ( resolve, reject ) => {
 		GetTotalPages( url )
 			.then(  totalPages      => GetBulkData( url, totalPages ) )
-			.then(  unformattedData => Bundle( unformattedData, TimestampCommerce, now ) )
+			.then(  unformattedData => FormatData( unformattedData, TimestampCommerce, now ) )
 			.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
 			.then(  results         => resolve( `GetData()   Finished - [ ${ results }]` ) )
 			.catch( error           => reject( `GetData()   Failed   - ${ error }` ) );

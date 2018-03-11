@@ -39,9 +39,8 @@
 	},
 	"homepage": "https://github.com/alex-page/black-lion#readme",
 	"dependencies": {
-		"async": "^2.6.0",
-		"got": "^8.0.0",
-		"node-schedule": "^1.2.5",
+		"got": "^8.3.0",
+		"node-schedule": "^1.3.0",
 		"rethinkdb": "^2.3.3"
 	},
 	"devDependencies": {
