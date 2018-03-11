@@ -2,7 +2,7 @@
  *
  * init.js
  *
- * GetCommerceData - Gets the commerce data from the API
+ * Initialise the Black Lion 🦁
  *
  **************************************************************************************************************************************************************/
 
@@ -35,7 +35,9 @@ Promise.resolve( Log.welcome( 'Starting up black lion' ) )
 	.then( () => {
 
 		// For testing can be removed later for cron jobs below
-		MergeData();
+		MergeData()
+			.then(  response => Log.message( response ) )
+			.catch( error    => Log.error( error ) );
 		// GetData();
 
 		// Every two minutes get the commerce data

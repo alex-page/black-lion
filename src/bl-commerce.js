@@ -25,18 +25,22 @@ const TimestampCommerce = require( './timestamp' );
 /**
  * GetCommerceData - Gets the commerce data from the API
  */
-const GetData = () => {
+const GetData = (
+		url = SETTINGS.get().api.commerce,
+		now = new Date()
+	) => {
 	Log.message( `GetData()   Started`);
 
-	// Time to minute when the file was ran
-	const now = ( new Date() ).toJSON().slice( 0, 16 );
+	now = now.toJSON().slice( 0, 16 );
 
-	GetTotalPages( SETTINGS.get().api.commerce )
-		.then(  totalPages      => GetBulkData( SETTINGS.get().api.commerce, totalPages ) )
-		.then(  unformattedData => Bundle( unformattedData, TimestampCommerce, now ) )
-		.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
-		.then(  results         => Log.message( `GetData()   Finished - [ ${ results }]` ) )
-		.catch( error           => Log.error( `GetData()   Failed   - ${ error }` ) );
+	return new Promise( ( resolve, reject ) => {
+		GetTotalPages( url )
+			.then(  totalPages      => GetBulkData( url, totalPages ) )
+			.then(  unformattedData => Bundle( unformattedData, TimestampCommerce, now ) )
+			.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
+			.then(  results         => resolve( `GetData()   Finished - [ ${ results }]` ) )
+			.catch( error           => reject( `GetData()   Failed   - ${ error }` ) );
+	})
 };
 
 module.exports = GetData;
