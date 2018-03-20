@@ -10,10 +10,10 @@
 'use strict';
 
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Local
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Log = require( './helper' ).Log;
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// DEPENDENCIES
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const Log = require( 'lognana' );
 
 
 /**
@@ -28,18 +28,13 @@ const Log = require( './helper' ).Log;
 const FormatData = ( data, FormatPattern, now ) => {
 	Log.verbose( `FormatData      - Changing the data asynchonously` );
 
-	return new Promise( ( resolve, reject ) => {
-
-		const formattedData = [];
-
-		data.map( item => {
-			formattedData.push( FormatPattern( item, now ) );
-		});
-
-		Promise.all( formattedData )
-			.then( resolve )
-			.catch( error => reject( error ) );
-	});
+	try {
+		const formattedData = data.map( item => FormatPattern( item, now ) );
+		return formattedData;
+	}
+	catch ( error ) {
+		Log.error( `FormatData() ${ error }` );
+	}
 }
 
 

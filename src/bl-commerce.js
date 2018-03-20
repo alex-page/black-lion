@@ -10,11 +10,16 @@
 'use strict';
 
 
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// DEPENDENCIES
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+const Log = require( 'lognana' );
+
+
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 const SETTINGS          = require( './settings' );
-const Log               = require( './helper' ).Log;
 const InsertDB          = require( './rethinkdb' ).InsertDB;
 const GetTotalPages     = require( './get' ).GetTotalPages;
 const GetBulkData       = require( './get' ).GetBulkData;
@@ -25,22 +30,25 @@ const TimestampCommerce = require( './timestamp' );
 /**
  * GetCommerceData - Gets the commerce data from the API
  */
-const GetData = (
-		url = SETTINGS.get().api.commerce,
-		now = new Date()
-	) => {
+const GetData = async (
+	url = SETTINGS.get().api.commerce,
+	now = new Date()
+) => {
 	Log.message( `GetData()   Started`);
 
 	now = now.toJSON().slice( 0, 16 );
 
-	return new Promise( ( resolve, reject ) => {
-		GetTotalPages( url )
-			.then(  totalPages      => GetBulkData( url, totalPages ) )
-			.then(  unformattedData => FormatData( unformattedData, TimestampCommerce, now ) )
-			.then(  data            => InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce ) )
-			.then(  results         => resolve( `GetData()   Finished - [ ${ results }]` ) )
-			.catch( error           => reject( `GetData()   Failed   - ${ error }` ) );
-	})
+	try {
+		const totalPages      = await GetTotalPages( url );
+		const unformattedData = await GetBulkData( url, totalPages );
+		const data            = await FormatData( unformattedData, TimestampCommerce, now );
+		const results         = await InsertDB( data, SETTINGS.get().db, SETTINGS.get().table.commerce );
+		Log.message( `GetData()   Finished - [ ${ results }]` );
+	}
+	catch( error ) {
+		Log.error( `GetData() failed: ${ error }` );
+	}
+
 };
 
 module.exports = GetData;

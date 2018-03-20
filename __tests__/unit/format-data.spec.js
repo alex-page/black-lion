@@ -11,6 +11,14 @@
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Dependencies
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+const Test  = require( 'ava' );
+const Sinon = require( 'sinon' );
+const Log   = require( 'lognana' );
+
+
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 const FormatData = require( '../../src/format-data' );
@@ -19,33 +27,32 @@ const FormatData = require( '../../src/format-data' );
 // ----------------------------------------------------------------
 // FormatData
 // ----------------------------------------------------------------
-test( 'FormatData: should take a function and data and run it asynchronously', () => {
+Test( 'FormatData: should take a function and data', test => {
 
-	const test = [{ "a": 24, "b": 15 }, { "a": 12, "b": 99 }, { "a": 1, "b": 1 } ];
-
-	const result = [ 39, 111, 2 ].sort();
+	const testData = [{ "a": 24, "b": 15 }, { "a": 12, "b": 99 }, { "a": 1, "b": 1 } ];
 
 	const TestFunction = ( item ) => {
 		return item.a + item.b;
 	};
 
-	FormatData( test, TestFunction )
-		.then( data => expect( data.sort() ).toEqual( result ) )
+	test.deepEqual( FormatData( testData, TestFunction ), [ 39, 111, 2 ] );
 
 });
 
 
-test( 'FormatData: should throw an error if the result of the function is not truthy', () => {
+Test( 'FormatData: should catch an error in the function', test => {
 
-	const test = [{ "a": 24, "b": 15 } ];
+	const spy = Sinon.spy( console, 'error' );
+
+	const testData = [{ "a": 24, "b": 15 } ];
 
 	const TestFunction = ( item ) => {
-		return new Promise( ( resolve, reject ) =>{
-			reject( 'Nope!' );
-		})
+		Log.error( 'This was made to fail' );
 	};
 
-	FormatData( test, TestFunction )
-		.catch( error => expect( error ).toEqual( 'Nope!' ) );
+	FormatData( testData, TestFunction );
 
+	console.log( spy.calledWith( 'This was made to fail' ) );
+
+	// test.is( spy, '' );
 });

@@ -16,13 +16,13 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const  RethinkDB  = require( 'rethinkdb' );
+const RethinkDB  = require( 'rethinkdb' );
+const Log        = require( 'lognana' );
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Log       = require( './helper' ).Log;
 const SETTINGS  = require( './settings' );
 
 
@@ -35,29 +35,26 @@ const SETTINGS  = require( './settings' );
  *
  * @returns {Promise}
  */
-const InsertDB = ( data, dbOptions, table, conflict = 'update' ) => {
+const InsertDB = async ( data, dbOptions, table, conflict = 'update' ) => {
 	Log.verbose( `InsertDB      @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
-	return new Promise( ( resolve, reject ) => {
+	return await RethinkDB
+		.connect( dbOptions )
+		.then( connection => {
 
-		RethinkDB
-			.connect( dbOptions )
-			.then( connection => {
+			RethinkDB
+				.table( table )
+				.insert( data, { conflict: conflict } )
+				.run( connection )
+				.then( HandleResults )
+				.then( data => {
+					connection.close();
+					resolve( data );
+				})
+				.catch( error => reject( error ) )
 
-				RethinkDB
-					.table( table )
-					.insert( data, { conflict: conflict } )
-					.run( connection )
-					.then( HandleResults )
-					.then( data => {
-						connection.close();
-						resolve( data );
-					})
-					.catch( error => reject( error ) )
-
-			})
-			.catch( error => reject( error ) )
-	})
+		})
+		.catch( error => reject( error ) )
 }
 
 
@@ -75,14 +72,19 @@ const InsertBulkDB = async ( data, chunkSize, dbOptions, table, conflict = 'upda
 
 	// Split the data into sizable chunks for rethinkDB insertion
 	Log.verbose( `InsertBulkDB  - Split the data into chunks of ${ chunkSize } ` );
-	const chunkedBatch = [];
-	while ( Object.keys( data ).length ) {
-		chunkedBatch.push( data.splice( 0, chunkSize ) );
-	}
+	try {
+		const chunkedBatch = [];
+		while ( Object.keys( data ).length ) {
+			chunkedBatch.push( data.splice( 0, chunkSize ) );
+		}
 
-	Log.verbose( `InsertBulkDB  - Inserting the chunks into DB` );
-	for( let itemBatch of chunkedBatch ) {
-		await InsertDB( itemBatch, dbOptions, table, conflict );
+		Log.verbose( `InsertBulkDB  - Inserting the chunks into DB` );
+		for( let itemBatch of chunkedBatch ) {
+			return await InsertDB( itemBatch, dbOptions, table, conflict );
+		}
+	}
+	catch( error ) {
+		Log.error( `InsertBulkDB() error: ${ error.message }` )
 	}
 }
 
@@ -97,25 +99,22 @@ const InsertBulkDB = async ( data, chunkSize, dbOptions, table, conflict = 'upda
 const GetDB = ( dbOptions, table ) => {
 	Log.verbose( `GetDB         - DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
-	return new Promise( ( resolve, reject ) => {
+	return await RethinkDB
+		.connect( dbOptions )
+		.then( connection => {
 
-		RethinkDB
-			.connect( dbOptions )
-			.then( connection => {
+			RethinkDB
+				.table( table )
+				.run( connection )
+				.then( rethinkData => rethinkData.toArray() )
+				.then( data => {
+					connection.close();
+					resolve( data );
+				})
+				.catch( error => reject( error ) )
 
-				RethinkDB
-					.table( table )
-					.run( connection )
-					.then( rethinkData => rethinkData.toArray() )
-					.then( data => {
-						connection.close();
-						resolve( data );
-					})
-					.catch( error => reject( error ) )
-
-		})
-		.catch( error => reject( error ) )
 	})
+	.catch( error => reject( error ) )
 }
 
 

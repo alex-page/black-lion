@@ -12,16 +12,16 @@
 'use strict';
 
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Dependencies
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// DEPENDENCIES
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const Got = require( 'got' );
+const Log = require( 'lognana' );
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Log      = require( './helper' ).Log;
 const SETTINGS = require( './settings' );
 
 
@@ -33,13 +33,15 @@ const SETTINGS = require( './settings' );
  *
  * @returns {Promise}           - The data body
  */
-const GetData = ( url, option ) => {
+const GetData = async ( url, option ) => {
 	Log.verbose( `GetData       - Getting page #${ option.query.page + 1 } from: ${ url }.` );
-	return new Promise( ( resolve, reject ) => {
-		Got( url, option )
-			.then( data => resolve( data.body ) )
-			.catch( error => reject( error ) );
-	});
+	try {
+		const data = Got( url, option );
+		return data.body;
+	}
+	catch( error ) {
+		Log.error( `GetData() error: ${ error.message }` );
+	}
 }
 
 
@@ -50,19 +52,21 @@ const GetData = ( url, option ) => {
  *
  * @returns {Promise}    - The total number of data items
  */
-const GetTotalPages = ( url ) => {
+const GetTotalPages = async ( url ) => {
 	Log.verbose( `GetTotalPages - Getting total pages from x-result-total.` );
-	return new Promise( ( resolve, reject ) => {
-		Got( url, {
-				json: true,
-				query: {
-					page: 0,
-					page_size: 1
-				}
-			})
-			.then( data => resolve( data.headers[ 'x-result-total' ] ) )
-			.catch( error => reject( error ) );
-	});
+	try {
+		const data = await Got( url, {
+			json: true,
+			query: {
+				page: 0,
+				page_size: 1
+			}
+		});
+		return data.headers[ 'x-result-total' ];
+	}
+	catch( error ) {
+		Log.error( `GetTotalPages() error: ${ error.message }` );
+	};
 }
 
 
@@ -75,11 +79,10 @@ const GetTotalPages = ( url ) => {
  *
  * @returns {Promise}           - The data from all of the requests
  */
-const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limit ) => {
+const GetBulkData = async ( url, totalItems, apiLimit = SETTINGS.get().api.limit ) => {
 	Log.verbose( `GetBulkData   - Getting ${ totalItems } items` );
 
-	return new Promise( ( resolve, reject ) => {
-
+	try {
 		// Get total requests and remove decimal
 		const dataBundle    = [];
 		const totalRequests = ( totalItems / apiLimit ) | 0;
@@ -88,25 +91,28 @@ const GetBulkData = ( url, totalItems, apiLimit = SETTINGS.get().api.limit ) => 
 		// Iterate through all the pages
 		while ( page <= totalRequests ) {
 
-			dataBundle.push(
-				GetData( url, {
-					json: true,
-					query: {
-						page: page,
-						page_size: apiLimit
-					}
-				})
-			)
+			const rawData = await GetData( url, {
+				json: true,
+				query: {
+					page: page,
+					page_size: apiLimit
+				}
+			});
+
+			dataBundle.push( rawData );
 
 			// Increase page number
 			page++;
 		}
 
-		Promise.all( dataBundle )
-			.then( data => resolve( [].concat.apply([], data ) ) )
-			.catch( error => reject( error ) );
+		const data = [].concat.apply( [], dataBundle );
 
-	})
+		return data;
+	}
+
+	catch( error ) {
+		Log.error( `GetBulkData() error: ${ error.message }` );
+	};
 }
 
 

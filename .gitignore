@@ -4,3 +4,4 @@ dist
 .vscode
 rethinkdb_data
 coverage
+.nyc_output
