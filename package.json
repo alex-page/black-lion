@@ -39,6 +39,7 @@
 	},
 	"homepage": "https://github.com/alex-page/black-lion#readme",
 	"dependencies": {
+		"cfonts": "^1.1.3",
 		"got": "^8.3.0",
 		"lognana": "^1.0.0",
 		"node-schedule": "^1.3.0",

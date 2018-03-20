@@ -26,7 +26,7 @@ const Log = require( 'lognana' );
  * @returns {Promise}
  */
 const FormatData = ( data, FormatPattern, now ) => {
-	Log.verbose( `FormatData      - Changing the data asynchonously` );
+	Log.verbose( `FormatData     - Changing the data asynchonously` );
 
 	try {
 		const formattedData = data.map( item => FormatPattern( item, now ) );

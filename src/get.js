@@ -34,7 +34,7 @@ const SETTINGS = require( './settings' );
  * @returns {Promise}           - The data body
  */
 const GetData = async ( url, option ) => {
-	Log.verbose( `GetData       - Getting page #${ option.query.page + 1 } from: ${ url }.` );
+	Log.verbose( `GetData       - Getting page #${ option.query.page + 1 } from: ${ url }` );
 	try {
 		const data = Got( url, option );
 		return data.body;

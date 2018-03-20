@@ -35,14 +35,15 @@ const SETTINGS  = require( './settings' );
  *
  * @returns {Promise}
  */
-const InsertDB = async ( data, dbOptions, table, conflict = 'update' ) => {
+const InsertDB = async( data, dbOptions, table, conflict = 'update' ) => {
 	Log.verbose( `InsertDB      @ DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
-	return await RethinkDB
+	try {
+		return await RethinkDB
 		.connect( dbOptions )
 		.then( connection => {
 
-			RethinkDB
+			return await RethinkDB
 				.table( table )
 				.insert( data, { conflict: conflict } )
 				.run( connection )
@@ -55,6 +56,10 @@ const InsertDB = async ( data, dbOptions, table, conflict = 'update' ) => {
 
 		})
 		.catch( error => reject( error ) )
+	}
+	catch ( error ){
+		Log.error( `InsertDB() error: ${ error.message }` )
+	}
 }
 
 
@@ -96,14 +101,14 @@ const InsertBulkDB = async ( data, chunkSize, dbOptions, table, conflict = 'upda
  *
  * @return {Promise}
  */
-const GetDB = ( dbOptions, table ) => {
+const GetDB = async ( dbOptions, table ) => {
 	Log.verbose( `GetDB         - DB: ${ dbOptions.db }, TABLE: ${ table }` );
 
-	return await RethinkDB
+	return RethinkDB
 		.connect( dbOptions )
 		.then( connection => {
 
-			RethinkDB
+			return RethinkDB
 				.table( table )
 				.run( connection )
 				.then( rethinkData => rethinkData.toArray() )

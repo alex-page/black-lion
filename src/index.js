@@ -14,6 +14,8 @@
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 const Schedule = require( 'node-schedule' );
+const CFonts   = require( 'cfonts' );
+const Log      = require( 'lognana' );
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -23,7 +25,14 @@ const GetData   = require( './bl-commerce' );
 const MergeData = require( './bl-merge' );
 
 
-// Check if the user is in verbose mode
+// CFonts ascii typography for Black Lion
+const blackLion = CFonts.render( 'Black|Lion', {
+	align: 'center',
+	colors: [ 'black', 'yellow' ]
+}).string;
+
+// Log settings and check if the user is in verbose mode
+Log.emoji = '🦁';
 if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 	Log.verboseMode = true;
 };
@@ -31,6 +40,7 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 
 // Log the welcome message then run the scheduled jobs
 const Initialise = async () => {
+	console.log( blackLion );
 	Log.welcome( 'Starting up black lion' );
 
 	try {
