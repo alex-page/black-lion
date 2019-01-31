@@ -5,3 +5,4 @@ dist
 rethinkdb_data
 coverage
 .nyc_output
+firebase.json

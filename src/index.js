@@ -1,83 +1,35 @@
-/***************************************************************************************************************************************************************
+/**
+ * BlackLion - index.js
  *
- * init.js
- *
- * Initialise the Black Lion 🦁
- *
- **************************************************************************************************************************************************************/
+ * Init - Start fetching and save data to API
+ */
 
 
-'use strict';
-
-
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Schedule = require( 'node-schedule' );
-const CFonts   = require( 'cfonts' );
-const Log      = require( 'lognana' );
+const CFonts = require( 'cfonts' );
 
 
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Local
-// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const GetData   = require( './bl-commerce' );
-const MergeData = require( './bl-merge' );
+// Local dependencies
+const GetData = require( './getdata' );
+// const SaveData = require( './savedata' );
 
 
-// CFonts ascii typography for Black Lion
-const blackLion = CFonts.render( 'Black|Lion', {
-	align: 'center',
-	colors: [ 'black', 'yellow' ]
-}).string;
+// Global settings
+const api = 'api.guildwars2.com/v2/commerce/prices';
+const limit = 200;
 
-// Log settings and check if the user is in verbose mode
-Log.emoji = '🦁';
-if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
-	Log.verboseMode = true;
+
+/**
+ * Init - start black lion
+ */
+const Init = async () => {
+	CFonts.say( 'Black|Lion', { align: 'center', colors: [ 'system', 'yellow' ] });
+	CFonts.say( '- Look alive, you lot. Let\'s make some coin. -', { align: 'center', font: 'console' });
+
+	const data = await GetData( api, limit );
+
+	// await SaveData( data );
 };
 
 
-// Log the welcome message then run the scheduled jobs
-const Initialise = async () => {
-	console.log( blackLion );
-	Log.welcome( 'Starting up black lion' );
-
-	try {
-		await GetData();
-		// await MergeData();
-
-		// Every two minutes get the commerce data
-		// Schedule.scheduleJob( '*/2 * * * *', () => GetData() );
-
-		// Every two days merge the data
-		// Schedule.scheduleJob( '0 0 */2 * *', () => MergeData() );
-	}
-	catch( error ) {
-		Log.error( `Initialise() error: ${ error.message }` );
-	}
-}
-
-Initialise();
-	// .then( () => {
-
-	// 	// For testing can be removed later for cron jobs below
-	// 	// MergeData()
-	// 	// 	.then(  response => Log.message( response ) )
-	// 	// 	.catch( error    => Log.error( error ) );
-	// 	// await GetData();
-
-	// 	// Every two minutes get the commerce data
-	//  	// Schedule.scheduleJob('*/2 * * * *', () => {
-	// 	// 	GetData();
-	// 	// });
-
-	// 	// // Every two days merge the data
-	// 	// Schedule.scheduleJob('0 0 */2 * *', () => {
-	// 	// 	MergeData();
-	// 	// });
-	// })
-	// .catch( error => Log.error( error ) );
-
-
-
+Init();
